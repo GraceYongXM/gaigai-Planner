@@ -43,30 +43,18 @@ class _RegisterPageState extends State<RegisterPage> {
                     children: [
                       Expanded(
                         child: TextFormField(
-                          validator: (value) => EmailValidator.validate(value!)
-                              ? null
-                              : "Please enter a valid email",
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please enter your username";
+                            } else if (double.tryParse(value.substring(0, 1)) !=
+                                null) {
+                              return "Username must start with a letter";
+                            }
+                            return null;
+                          },
                           maxLines: 1,
                           decoration: InputDecoration(
-                            hintText: 'First name',
-                            prefixIcon: const Icon(Icons.person),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Expanded(
-                        child: TextFormField(
-                          validator: (value) => EmailValidator.validate(value!)
-                              ? null
-                              : "Please enter a valid email",
-                          maxLines: 1,
-                          decoration: InputDecoration(
-                            hintText: 'Last name',
+                            hintText: '*Username',
                             prefixIcon: const Icon(Icons.person),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -80,12 +68,33 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 20,
                   ),
                   TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your number';
+                      } else if (value.length != 8) {
+                        return "Please enter a valid number";
+                      }
+                      return null;
+                    },
+                    maxLines: 1,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.phone),
+                      hintText: '*Mobile number',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
                     validator: (value) => EmailValidator.validate(value!)
                         ? null
                         : "Please enter a valid email",
                     maxLines: 1,
                     decoration: InputDecoration(
-                      hintText: 'Enter your email',
+                      hintText: 'Email address',
                       prefixIcon: const Icon(Icons.email),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -106,7 +115,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     obscureText: true,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.lock),
-                      hintText: 'Enter your password',
+                      hintText: '*Password',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -115,9 +124,39 @@ class _RegisterPageState extends State<RegisterPage> {
                   const SizedBox(
                     height: 20,
                   ),
+                  SizedBox(
+                    child: const Text('*Required', textAlign: TextAlign.left),
+                    width: double.infinity,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   ElevatedButton(
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {}
+                      if (_formKey.currentState!.validate()) {
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Success'),
+                            content: const Text('You have created an account!'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, 'OK');
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const LoginPage(title: 'Login UI'),
+                                    ),
+                                  );
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
@@ -128,9 +167,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 20,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

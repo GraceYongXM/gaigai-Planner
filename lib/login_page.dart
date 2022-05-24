@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
                     maxLines: 1,
                     decoration: InputDecoration(
                       hintText: 'Username',
-                      prefixIcon: const Icon(Icons.email),
+                      prefixIcon: const Icon(Icons.person),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -90,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
