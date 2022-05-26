@@ -54,7 +54,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           },
                           maxLines: 1,
                           decoration: InputDecoration(
-                            hintText: '*Username',
+                            hintText: 'Username',
                             prefixIcon: const Icon(Icons.person),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -79,7 +79,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     maxLines: 1,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.phone),
-                      hintText: '*Mobile number',
+                      hintText: 'Mobile number',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -115,18 +115,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     obscureText: true,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.lock),
-                      hintText: '*Password',
+                      hintText: 'Password',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  SizedBox(
-                    child: const Text('*Required', textAlign: TextAlign.left),
-                    width: double.infinity,
                   ),
                   const SizedBox(
                     height: 20,
