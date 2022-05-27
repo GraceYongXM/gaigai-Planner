@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gaigai_planner/profile_page.dart';
 
 import './login_page.dart';
 
@@ -38,15 +39,16 @@ class _HomePageState extends State<HomePage>
         ),
         actions: <Widget>[
           PopupMenuButton<String>(
+            tooltip: 'Settings',
             itemBuilder: (BuildContext context) {
               return <PopupMenuItem<String>>[
                 const PopupMenuItem<String>(
-                  child: Text('Profile'),
                   value: 'Profile',
+                  child: Text('Profile'),
                 ),
                 const PopupMenuItem<String>(
-                  child: Text('Log out'),
                   value: 'Log out',
+                  child: Text('Log out'),
                 ),
               ];
             },
@@ -58,6 +60,13 @@ class _HomePageState extends State<HomePage>
                     builder: (context) => const LoginPage(title: 'Login UI'),
                   ),
                 );
+              } else if (choice == 'Profile') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ProfilePage(),
+                  ),
+                );
               }
             },
           )
@@ -67,19 +76,61 @@ class _HomePageState extends State<HomePage>
         controller: _tabController,
         children: <Widget>[
           Scaffold(
-            body: Center(child: const Text('Home Page')),
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text('You have not created any events.',
+                      style: TextStyle(fontSize: 18)),
+                  TextButton(
+                    onPressed: null,
+                    child: Text(
+                      'Create new event',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () => {},
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              tooltip: 'Create new event',
+              child: const Icon(Icons.add),
+            ),
           ),
           Scaffold(
-            body: Center(child: const Text('Friend Page')),
-          )
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text('You have not added any friends.',
+                      style: TextStyle(fontSize: 18)),
+                  TextButton(
+                    onPressed: null,
+                    child: Text(
+                      'Add friend',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () => {},
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              tooltip: 'Add friend',
+              child: const Icon(Icons.person_add),
+            ),
+          ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
+      /*floatingActionButton: FloatingActionButton(
         onPressed: () => {},
         backgroundColor: Theme.of(context).colorScheme.primary,
-        child: const Icon(Icons.add),
         tooltip: 'Create new event',
-      ),
+        child: const Icon(Icons.add),
+      ),*/
     );
   }
 }

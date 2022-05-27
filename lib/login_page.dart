@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             const SizedBox(
-              height: 60,
+              height: 20,
             ),
             Form(
               key: _formKey,
