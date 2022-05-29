@@ -42,17 +42,20 @@ class DBHelper {
     var db = await openDatabase(
       path,
       version: 1,
-      onCreate: (database, version) async {
-        var createUserTable = """CREATE TABLE users(
-          acccountNo INTEGER PRIMARY KEY AUTOINCREMENT,
-          username TEXT,
-          email TEXT,
-          mobileNo INTEGER
-        )""";
-        await database.execute(createUserTable);
-      },
+      onCreate: _onCreate,
     );
     return db;
+  }
+
+  Future _onCreate(Database database, int version) async {
+    var createUserTable = """CREATE TABLE users(
+          id INTEGER PRIMARY KEY,
+          username TEXT,
+          email TEXT,
+          mobileNo TEXT,
+          password TEXT
+        )""";
+    await database.execute(createUserTable);
   }
 
   Future<List<Activity>> getActivity() async {
@@ -66,6 +69,16 @@ class DBHelper {
     return activities;
   }
 
+  Future<List<User>> getUsers() async {
+    var dbClient = await database;
+    List<Map> list = await dbClient.query('users', columns: null);
+    List<User> users = [];
+    for (int i = 0; i < list.length; i++) {
+      users.add(User.fromMap(list[i]));
+    }
+    return users;
+  }
+
   Future<int> createUser(User user) async {
     var dbClient = await database;
     int res = await dbClient.insert("users", user.toMap());
@@ -77,7 +90,7 @@ class DBHelper {
     int res = await dbClient.delete(
       "users",
       where: 'accountNo = ?',
-      whereArgs: [user.accountNo],
+      whereArgs: [user.id],
     );
     return res;
   }
@@ -88,15 +101,14 @@ class DBHelper {
       'users',
       user.toMap(),
       where: 'accountNo = ?',
-      whereArgs: [user.accountNo],
+      whereArgs: [user.id],
     );
     return res;
   }
 
   Future<bool> userExists(String username) async {
     var dbClient = await database;
-    //var res = await dbClient
-    //    .rawQuery("Select * FROM users WHERE username = '$username'");
+    //var res = await dbClient.rawQuery("Select * FROM users");
     var res = await dbClient.query(
       "users",
       where: 'username = ?',

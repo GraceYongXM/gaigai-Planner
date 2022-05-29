@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import './signup_page.dart';
 import './home_page.dart';
+import './dbhelper.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key, required this.title}) : super(key: key);
@@ -14,6 +15,11 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   var rememberValue = false;
+  bool exists = false;
+  bool correctPassword = false;
+
+  var dbHelper = DBHelper();
+  late String username;
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +49,18 @@ class _LoginPageState extends State<LoginPage> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your username';
+                      } else {
+                        username = value;
+                        setState(() {
+                          dbHelper.userExists(value).then((boolean) {
+                            exists = boolean;
+                          });
+                        });
+                        if (!exists) {
+                          return 'Username does not exist';
+                        }
+                        return null;
                       }
-                      return null;
                     },
                     maxLines: 1,
                     decoration: InputDecoration(
@@ -62,8 +78,17 @@ class _LoginPageState extends State<LoginPage> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your password';
+                      } else {
+                        setState(() {
+                          dbHelper.canLogin(username, value).then((boolean) {
+                            correctPassword = boolean;
+                          });
+                        });
+                        if (!correctPassword) {
+                          return 'Incorrect username/password';
+                        }
+                        return null;
                       }
-                      return null;
                     },
                     maxLines: 1,
                     obscureText: true,

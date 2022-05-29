@@ -1,9 +1,9 @@
 class User {
-  late int accountNo, mobileNo;
-  late String username, email, password;
+  late int? id;
+  late String username, email, mobileNo, password;
 
   User(
-    this.accountNo,
+    this.id,
     this.username,
     this.email,
     this.mobileNo,
@@ -11,7 +11,7 @@ class User {
   );
 
   User.fromMap(dynamic obj) {
-    accountNo = obj['accountNo'];
+    id = obj['id'];
     username = obj['username'];
     email = obj['email'];
     mobileNo = obj['mobileNo'];
@@ -20,7 +20,7 @@ class User {
 
   Map<String, dynamic> toMap() {
     return {
-      "accountNo": accountNo,
+      "id": id,
       "username": username,
       "email": email,
       "mobileNo": mobileNo,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import './login_page.dart';
-import './home_page.dart';
+import './activitylist.dart';
 
 void main() => runApp(GaigaiPlanner());
 
@@ -31,6 +31,7 @@ class GaigaiPlanner extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: const LoginPage(title: 'Login UI'),
+      //home: ActivityListPage(),
       debugShowCheckedModeBanner: false,
     );
   }
