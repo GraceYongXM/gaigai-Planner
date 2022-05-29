@@ -1,20 +1,37 @@
 import 'package:flutter/material.dart';
 
-import './activitylist.dart';
+import './login_page.dart';
+import './home_page.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(GaigaiPlanner());
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+ColorScheme defaultColorScheme = const ColorScheme(
+  primary: Color(0xffBB86FC),
+  secondary: Color(0xff03DAC6),
+  surface: Colors.white,
+  background: Colors.white,
+  error: Color(0xffCF6679),
+  onPrimary: Colors.white,
+  onSecondary: Colors.black,
+  onSurface: Colors.blue,
+  onBackground: Colors.blue,
+  onError: Color(0xff000000),
+  brightness: Brightness.light,
+);
+
+class GaigaiPlanner extends StatelessWidget {
+  const GaigaiPlanner({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Activity List',
       theme: ThemeData(
+        colorScheme: defaultColorScheme,
         primarySwatch: Colors.blue,
       ),
-      home: const ActivityListPage(),
+      home: const LoginPage(title: 'Login UI'),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
