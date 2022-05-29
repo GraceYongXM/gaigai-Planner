@@ -6,14 +6,23 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
+import './user.dart';
+
 class DBHelper {
+  static final DBHelper _instance = DBHelper.internal();
+
+  factory DBHelper() => _instance;
   static Database? _database;
 
-  Future<Database?> get database async {
-    if (_database != null) return _database;
+  Future<Database> get database async {
+    if (_database != null) {
+      return _database as Database;
+    }
     _database = await initDB();
-    return _database;
+    return _database as Database;
   }
+
+  DBHelper.internal();
 
   initDB() async {
     // get database directory's path
@@ -30,18 +39,76 @@ class DBHelper {
       await io.File(path).writeAsBytes(bytes, flush: true);
     }
 
-    var db = await openDatabase(path, version: 1);
+    var db = await openDatabase(
+      path,
+      version: 1,
+      onCreate: (database, version) async {
+        var createUserTable = """CREATE TABLE users(
+          acccountNo INTEGER PRIMARY KEY AUTOINCREMENT,
+          username TEXT,
+          email TEXT,
+          mobileNo INTEGER
+        )""";
+        await database.execute(createUserTable);
+      },
+    );
     return db;
   }
 
   Future<List<Activity>> getActivity() async {
     var dbClient = await database;
-    List<Map> list = await dbClient!.rawQuery('SELECT * FROM activities');
+    List<Map> list = await dbClient.rawQuery('SELECT * FROM activities');
     List<Activity> activities = [];
     for (int i = 0; i < list.length; i++) {
       activities.add(Activity(list[i]['id'], list[i]['name'], list[i]['type'],
           list[i]['location'], list[i]['cost'], list[i]['travelTime']));
     }
     return activities;
+  }
+
+  Future<int> createUser(User user) async {
+    var dbClient = await database;
+    int res = await dbClient.insert("users", user.toMap());
+    return res;
+  }
+
+  Future<int> deleteUser(User user) async {
+    var dbClient = await database;
+    int res = await dbClient.delete(
+      "users",
+      where: 'accountNo = ?',
+      whereArgs: [user.accountNo],
+    );
+    return res;
+  }
+
+  Future<int> updateUser(User user) async {
+    var dbClient = await database;
+    int res = await dbClient.update(
+      'users',
+      user.toMap(),
+      where: 'accountNo = ?',
+      whereArgs: [user.accountNo],
+    );
+    return res;
+  }
+
+  Future<bool> userExists(String username) async {
+    var dbClient = await database;
+    //var res = await dbClient
+    //    .rawQuery("Select * FROM users WHERE username = '$username'");
+    var res = await dbClient.query(
+      "users",
+      where: 'username = ?',
+      whereArgs: [username],
+    );
+    return res.isNotEmpty;
+  }
+
+  Future<bool> canLogin(String username, String password) async {
+    var dbClient = await database;
+    var res = await dbClient.rawQuery(
+        "SELECT * FROM users WHERE username = '$username' and password = '$password'");
+    return res.isNotEmpty;
   }
 }
