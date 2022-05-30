@@ -109,13 +109,6 @@ class _LoginPageState extends State<LoginPage> {
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(context, 'OK');
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const LoginPage(title: 'Login UI'),
-                                      ),
-                                    );
                                   },
                                   child: const Text('OK'),
                                 ),
@@ -133,13 +126,6 @@ class _LoginPageState extends State<LoginPage> {
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(context, 'OK');
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const LoginPage(title: 'Login UI'),
-                                      ),
-                                    );
                                   },
                                   child: const Text('OK'),
                                 ),
