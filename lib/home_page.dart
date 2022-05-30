@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gaigai_planner/activitylist.dart';
 import 'package:gaigai_planner/profile_page.dart';
 
 import './login_page.dart';
@@ -17,7 +18,7 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, initialIndex: 0, vsync: this);
+    _tabController = TabController(length: 3, initialIndex: 0, vsync: this);
   }
 
   @override
@@ -35,6 +36,7 @@ class _HomePageState extends State<HomePage>
           tabs: const <Widget>[
             Tab(icon: Icon(Icons.home_rounded)),
             Tab(icon: Icon(Icons.people_alt_outlined)),
+            Tab(icon: Icon(Icons.local_activity_rounded)),
           ],
         ),
         actions: <Widget>[
@@ -123,14 +125,9 @@ class _HomePageState extends State<HomePage>
               child: const Icon(Icons.person_add),
             ),
           ),
+          ActivityListPage(),
         ],
       ),
-      /*floatingActionButton: FloatingActionButton(
-        onPressed: () => {},
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        tooltip: 'Create new event',
-        child: const Icon(Icons.add),
-      ),*/
     );
   }
 }
