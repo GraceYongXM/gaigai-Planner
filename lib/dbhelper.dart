@@ -114,6 +114,7 @@ class DBHelper {
       where: 'username = ?',
       whereArgs: [username],
     );
+
     return res.isNotEmpty;
   }
 

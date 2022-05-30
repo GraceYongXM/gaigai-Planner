@@ -15,6 +15,9 @@ class ActivityListPage extends StatefulWidget {
 }
 
 class _ActivityListPageState extends State<ActivityListPage> {
+  var dbHelper = DBHelper();
+  late bool text;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -30,6 +33,9 @@ class _ActivityListPageState extends State<ActivityListPage> {
       activityList = _activityList;
       userList = _userList;
     });
+    dbHelper.canLogin('tertle', '12345').then((value) {
+      text = value;
+    });
   }
 
   @override
@@ -39,7 +45,7 @@ class _ActivityListPageState extends State<ActivityListPage> {
         title: Text('Activity List!'),
       ),
       body: Container(
-        child: Text('activityList.length: ' + activityList.length.toString()),
+        child: Text(text.toString()),
       ),
     );
   }
