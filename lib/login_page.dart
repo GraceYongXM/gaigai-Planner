@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import './signup_page.dart';
 import './home_page.dart';
+import './dbhelper.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key, required this.title}) : super(key: key);
@@ -14,6 +15,11 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   var rememberValue = false;
+  bool exists = false;
+  bool correctPassword = false;
+
+  var dbHelper = DBHelper();
+  late String _username, _password;
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +49,12 @@ class _LoginPageState extends State<LoginPage> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your username';
+                      } else {
+                        return null;
                       }
-                      return null;
+                    },
+                    onSaved: (value) {
+                      _username = value as String;
                     },
                     maxLines: 1,
                     decoration: InputDecoration(
@@ -62,8 +72,12 @@ class _LoginPageState extends State<LoginPage> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your password';
+                      } else {
+                        return null;
                       }
-                      return null;
+                    },
+                    onSaved: (value) {
+                      _password = value as String;
                     },
                     maxLines: 1,
                     obscureText: true,
@@ -79,14 +93,68 @@ class _LoginPageState extends State<LoginPage> {
                     height: 20,
                   ),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const HomePage(),
-                          ),
-                        );
+                        _formKey.currentState!.save();
+                        exists = await dbHelper.userExists(_username);
+                        correctPassword =
+                            await dbHelper.canLogin(_username, _password);
+                        if (!exists) {
+                          showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: const Text('Error'),
+                              content: const Text('Username does not exist'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context, 'OK');
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const LoginPage(title: 'Login UI'),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            ),
+                          );
+                        } else if (!correctPassword) {
+                          showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: const Text('Error'),
+                              content:
+                                  const Text('Incorrect username/password!'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context, 'OK');
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const LoginPage(title: 'Login UI'),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            ),
+                          );
+                          ;
+                        } else {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const HomePage(),
+                            ),
+                          );
+                        }
                       }
                     },
                     style: ElevatedButton.styleFrom(
