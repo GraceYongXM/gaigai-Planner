@@ -13,6 +13,8 @@ class ActivityListPage extends StatefulWidget {
 }
 
 class _ActivityListPageState extends State<ActivityListPage> {
+  var dbHelper = DBHelper();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -32,7 +34,7 @@ class _ActivityListPageState extends State<ActivityListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Activity List!'),
+        title: const Text('Activity List!'),
       ),
       body: Container(
         child: ListView.separated(
@@ -41,10 +43,7 @@ class _ActivityListPageState extends State<ActivityListPage> {
             itemBuilder: (context, index) {
               return Container(
                 padding: EdgeInsets.all(15),
-                child: Text('Activity: ' +
-                    activityList[index].name +
-                    ' ' +
-                    activityList[index].type),
+                child: Text(activityList[index].name),
               );
             },
             separatorBuilder: (context, index) => Divider(

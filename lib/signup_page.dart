@@ -1,7 +1,10 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:gaigai_planner/activitylist.dart';
 
 import './login_page.dart';
+import './dbhelper.dart';
+import './user.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key, required this.title}) : super(key: key);
@@ -14,6 +17,9 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   var rememberValue = false;
+
+  var dbHelper = DBHelper();
+  late String username, email, password, mobileNo;
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +53,8 @@ class _RegisterPageState extends State<RegisterPage> {
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return "Please enter your username";
-                            } else if (double.tryParse(value.substring(0, 1)) !=
-                                null) {
-                              return "Username must start with a letter";
                             }
+                            username = value;
                             return null;
                           },
                           maxLines: 1,
@@ -75,6 +79,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       } else if (value.length != 8) {
                         return "Please enter a valid number";
                       }
+                      mobileNo = value;
                       return null;
                     },
                     maxLines: 1,
@@ -90,9 +95,15 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 20,
                   ),
                   TextFormField(
-                    validator: (value) => EmailValidator.validate(value!)
-                        ? null
-                        : "Please enter a valid email",
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your number';
+                      } else if (!EmailValidator.validate(value)) {
+                        return "Please enter a valid number";
+                      }
+                      email = value;
+                      return null;
+                    },
                     maxLines: 1,
                     decoration: InputDecoration(
                       hintText: 'Email address',
@@ -110,6 +121,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your password';
                       }
+                      password = value;
                       return null;
                     },
                     maxLines: 1,
@@ -128,6 +140,11 @@ class _RegisterPageState extends State<RegisterPage> {
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
+                        setState(() {
+                          dbHelper.createUser(
+                              User(null, username, email, mobileNo, password));
+                        });
+
                         showDialog<String>(
                           context: context,
                           builder: (BuildContext context) => AlertDialog(

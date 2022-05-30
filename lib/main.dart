@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-
 import './login_page.dart';
-import './home_page.dart';
+import './activitylist.dart';
 
 void main() => runApp(GaigaiPlanner());
 
@@ -22,7 +21,7 @@ ColorScheme defaultColorScheme = const ColorScheme(
 
 class GaigaiPlanner extends StatelessWidget {
   const GaigaiPlanner({Key? key}) : super(key: key);
-  
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,6 +31,7 @@ class GaigaiPlanner extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: const LoginPage(title: 'Login UI'),
+      //home: ActivityListPage(),
       debugShowCheckedModeBanner: false,
     );
   }

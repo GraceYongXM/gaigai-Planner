@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage>
             )),
         bottom: TabBar(
           controller: _tabController,
-          tabs: <Widget>[
+          tabs: const <Widget>[
             Tab(icon: Icon(Icons.home_rounded)),
             Tab(icon: Icon(Icons.people_alt_outlined)),
             Tab(icon: Icon(Icons.local_activity_rounded)),
