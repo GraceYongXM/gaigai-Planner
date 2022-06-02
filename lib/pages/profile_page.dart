@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:gaigai_planner/pages/edit_profile_page.dart';
+
+import './home_page.dart';
+import '../models/user.dart';
+import './edit_profile_page.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({Key? key, required this.user}) : super(key: key);
+  final User user;
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -12,7 +18,19 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your Profile'),
+        title: const Text('Your Profile'),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_rounded,
+            color: Colors.white,
+          ),
+          onPressed: () => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(user: widget.user as User),
+            ),
+          ),
+        ),
         actions: <Widget>[
           PopupMenuButton<String>(
             tooltip: 'Settings',
@@ -28,9 +46,68 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ];
             },
-            onSelected: null,
+            onSelected: (String choice) {
+              if (choice == 'Edit your profile') {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditProfilePage(user: widget.user),
+                  ),
+                );
+              }
+            },
           )
         ],
+      ),
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            ListTile(
+              title: const Text(
+                'Username',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+              subtitle: Text(
+                widget.user.username,
+                style: const TextStyle(
+                  fontSize: 15,
+                ),
+              ),
+            ),
+            const Divider(),
+            ListTile(
+              title: const Text(
+                'Mobile number',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+              subtitle: Text(
+                widget.user.mobileNo,
+                style: const TextStyle(
+                  fontSize: 15,
+                ),
+              ),
+            ),
+            const Divider(),
+            ListTile(
+              title: const Text(
+                'Email address',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+              subtitle: Text(
+                widget.user.email,
+                style: const TextStyle(
+                  fontSize: 15,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

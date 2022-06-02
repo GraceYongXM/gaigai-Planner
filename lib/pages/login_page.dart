@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'signup_page.dart';
 import 'home_page.dart';
 import '../dbhelper.dart';
+import '../models/user.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key, required this.title}) : super(key: key);
@@ -16,6 +17,7 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   var rememberValue = false;
   bool exists = false;
+  User? user;
   bool correctPassword = false;
 
   var dbHelper = DBHelper();
@@ -97,9 +99,9 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
-                        exists = await dbHelper.userExists(_username);
-                        correctPassword =
-                            await dbHelper.canLogin(_username, _password);
+                        exists = await dbHelper.userExists(_username) != null;
+                        user = await dbHelper.canLogin(_username, _password);
+                        correctPassword = user != null;
                         if (!exists) {
                           showDialog<String>(
                             context: context,
@@ -135,10 +137,12 @@ class _LoginPageState extends State<LoginPage> {
                           );
                           ;
                         } else {
+                          // ignore: use_build_context_synchronously
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const HomePage(),
+                              builder: (context) =>
+                                  HomePage(user: user as User),
                             ),
                           );
                         }

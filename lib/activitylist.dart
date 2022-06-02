@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import './dbhelper.dart';
-import './activity.dart';
+import 'models/activity.dart';
 
 List<Activity> activityList = [];
 
