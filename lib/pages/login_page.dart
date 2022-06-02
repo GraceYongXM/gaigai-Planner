@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import './signup_page.dart';
-import './home_page.dart';
-import './dbhelper.dart';
+import 'signup_page.dart';
+import 'home_page.dart';
+import '../dbhelper.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key, required this.title}) : super(key: key);

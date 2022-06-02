@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gaigai_planner/activitylist.dart';
-import 'package:gaigai_planner/profile_page.dart';
+import 'package:gaigai_planner/pages/profile_page.dart';
 
-import './login_page.dart';
+import 'login_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
