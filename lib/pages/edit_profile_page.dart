@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 
-import './home_page.dart';
 import './profile_page.dart';
 import '../dbhelper.dart';
 import '../models/user.dart';
@@ -25,9 +24,21 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Your Profile'),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_rounded,
+            color: Colors.white,
+          ),
+          onPressed: () => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProfilePage(user: widget.user),
+            ),
+          ),
+        ),
       ),
       body: SingleChildScrollView(
-        physics: ClampingScrollPhysics(),
+        physics: const ClampingScrollPhysics(),
         child: Container(
           padding: const EdgeInsets.all(20),
           child: Column(

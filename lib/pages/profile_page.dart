@@ -4,6 +4,7 @@ import 'package:gaigai_planner/pages/edit_profile_page.dart';
 import './home_page.dart';
 import '../models/user.dart';
 import './edit_profile_page.dart';
+import './edit_password_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key, required this.user}) : super(key: key);
@@ -52,6 +53,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => EditProfilePage(user: widget.user),
+                  ),
+                );
+              } else if (choice == 'Change password') {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditPasswordPage(user: widget.user),
                   ),
                 );
               }
