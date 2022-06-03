@@ -1,12 +1,12 @@
 import 'dart:io' as io;
 import 'dart:async';
 import 'package:flutter/services.dart';
-import 'package:gaigai_planner/activity.dart';
+import 'package:gaigai_planner/models/activity.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-import './user.dart';
+import './models/user.dart';
 
 class DBHelper {
   static final DBHelper _instance = DBHelper.internal();
@@ -89,7 +89,7 @@ class DBHelper {
     var dbClient = await database;
     int res = await dbClient.delete(
       "users",
-      where: 'accountNo = ?',
+      where: 'id = ?',
       whereArgs: [user.id],
     );
     return res;
@@ -100,13 +100,13 @@ class DBHelper {
     int res = await dbClient.update(
       'users',
       user.toMap(),
-      where: 'accountNo = ?',
+      where: 'id = ?',
       whereArgs: [user.id],
     );
     return res;
   }
 
-  Future<bool> userExists(String username) async {
+  Future<User?> userExists(String username) async {
     var dbClient = await database;
     //var res = await dbClient.rawQuery("Select * FROM users");
     var res = await dbClient.query(
@@ -114,14 +114,19 @@ class DBHelper {
       where: 'username = ?',
       whereArgs: [username],
     );
-
-    return res.isNotEmpty;
+    if (res.isNotEmpty) {
+      return User.fromMap(res.first);
+    }
+    return null;
   }
 
-  Future<bool> canLogin(String username, String password) async {
+  Future<User?> canLogin(String username, String password) async {
     var dbClient = await database;
     var res = await dbClient.rawQuery(
         "SELECT * FROM users WHERE username = '$username' and password = '$password'");
-    return res.isNotEmpty;
+    if (res.isNotEmpty) {
+      return User.fromMap(res.first);
+    }
+    return null;
   }
 }
