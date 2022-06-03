@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import './login_page.dart';
-import './activitylist.dart';
 
 void main() => runApp(GaigaiPlanner());
 

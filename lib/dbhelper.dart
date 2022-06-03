@@ -6,7 +6,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 import './user.dart';
-import './username.dart';
 import './activity.dart';
 
 class DBHelper {
@@ -57,49 +56,6 @@ class DBHelper {
           password TEXT
         )""";
     await database.execute(createUserTable);
-
-    var createUsernameTable = """CREATE TABLE usernames(
-          id INTEGER PRIMARY KEY,
-          usernames TEXT UNIQUE
-        )""";
-    await database.execute(createUsernameTable);
-  }
-
-  bool isUniqueUsername(String username) {
-    /*var unique = true;
-    createUsername(Username(null, username)).then(
-      (value) => true,
-      onError: () {
-        unique = false;
-      },
-    );
-    return unique;*/
-    try {
-      print("hi");
-      createUsername(Username(null, username));
-    } on DatabaseException catch (e) {
-      print("yay");
-      return false;
-    }
-    return true;
-  }
-
-  Future<int> createUsername(Username username) async {
-    var dbClient = await database;
-    int res = await dbClient.insert("usernames", username.toMap());
-    print("res" + res.toString());
-    return res;
-  }
-
-  Future<List<User>> getUsernames() async {
-    var dbClient = await database;
-    List<Map> list = await dbClient.query('usernames', columns: null);
-    List<User> usernames = [];
-    for (int i = 0; i < list.length; i++) {
-      usernames.add(User.fromMap(list[i]));
-      print(usernames);
-    }
-    return usernames;
   }
 
   Future<List<Activity>> getActivity() async {
