@@ -116,40 +116,61 @@ class _EditPasswordPageState extends State<EditPasswordPage> {
                         if (_formKey.currentState!.validate()) {
                           if (oldPassword == widget.user.password) {
                             if (newPassword == confirmPassword) {
-                              showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) => AlertDialog(
-                                  content: const Text('Confirm changes?'),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text('Cancel'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        User newUser = User(
-                                            widget.user.id,
-                                            widget.user.username,
-                                            widget.user.email,
-                                            widget.user.mobileNo,
-                                            newPassword);
-                                        dbHelper.updateUser(newUser);
-                                        Navigator.pop(context);
-                                        Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                ProfilePage(user: newUser),
-                                          ),
-                                        );
-                                      },
-                                      child: const Text('OK'),
-                                    ),
-                                  ],
-                                ),
-                              );
+                              if (oldPassword != newPassword) {
+                                showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                    content: const Text('Confirm changes?'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('Cancel'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          User newUser = User(
+                                              widget.user.id,
+                                              widget.user.username,
+                                              widget.user.email,
+                                              widget.user.mobileNo,
+                                              newPassword);
+                                          dbHelper.updateUser(newUser);
+                                          Navigator.pop(context);
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ProfilePage(user: newUser),
+                                            ),
+                                          );
+                                        },
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              } else {
+                                showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                    title: const Text('Error'),
+                                    content: const Text(
+                                        'Please change your password'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
                             } else {
                               showDialog<String>(
                                 context: context,
