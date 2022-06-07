@@ -1,30 +1,28 @@
 class User {
   late int? id;
-  late String username, email, mobileNo, password;
+  late String username, mobileNo;
+  late DateTime createTime;
 
   User(
     this.id,
     this.username,
-    this.email,
     this.mobileNo,
-    this.password,
+    this.createTime,
   );
 
   User.fromMap(dynamic obj) {
     id = obj['id'];
     username = obj['username'];
-    email = obj['email'];
     mobileNo = obj['mobileNo'];
-    password = obj['password'];
+    createTime = obj['createTime'];
   }
 
   Map<String, dynamic> toMap() {
     return {
       "id": id,
       "username": username,
-      "email": email,
       "mobileNo": mobileNo,
-      "password": password,
+      "createTime": createTime,
     };
   }
 }

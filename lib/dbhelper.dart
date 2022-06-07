@@ -5,7 +5,6 @@ import 'package:gaigai_planner/models/activity.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
-
 import './models/user.dart';
 
 class DBHelper {
@@ -50,7 +49,7 @@ class DBHelper {
   Future _onCreate(Database database, int version) async {
     var createUserTable = """CREATE TABLE users(
           id INTEGER PRIMARY KEY,
-          username TEXT,
+          username TEXT UNIQUE,
           email TEXT,
           mobileNo TEXT,
           password TEXT
