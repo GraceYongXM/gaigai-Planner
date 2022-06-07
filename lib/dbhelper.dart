@@ -5,6 +5,7 @@ import 'package:gaigai_planner/models/activity.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
+
 import './models/user.dart';
 
 class DBHelper {
@@ -49,13 +50,16 @@ class DBHelper {
   Future _onCreate(Database database, int version) async {
     var createUserTable = """CREATE TABLE users(
           id INTEGER PRIMARY KEY,
-          username TEXT UNIQUE,
+          username TEXT,
           email TEXT,
           mobileNo TEXT,
           password TEXT
         )""";
     var createEventTable = """CREATE TABLE events(
           id INTEGER PRIMARY KEY
+          eventID INTEGER,
+          userID INTEGER,
+          eventName TEXT,
         )""";
     var createFriendTable = """CREATE TABLE friends(
           id INTEGER PRIMARY KEY,
@@ -69,7 +73,7 @@ class DBHelper {
         )""";
     await database.execute(createUserTable);
     await database.execute(createEventTable);
-    await database.execute(createEventTable);
+    await database.execute(createFriendTable);
     await database.execute(createRequestTable);
   }
 

@@ -41,7 +41,6 @@ class GaigaiPlanner extends StatelessWidget {
       routes: {
         'login': (_) => const LoginPage(title: 'Login UI'),
         '/signup': (_) => const RegisterPage(title: 'Register UI'),
-        '/home': (_) => const HomePage(user: user)
       },
       theme: ThemeData(
         colorScheme: defaultColorScheme,

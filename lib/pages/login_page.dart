@@ -99,9 +99,9 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
-                        exists = await dbHelper.userExists(_username) != null;
+                        /*exists = await dbHelper.userExists(_username) != null;
                         user = await dbHelper.canLogin(_username, _password);
-                        correctPassword = user != null;
+                        correctPassword = user != null;*/
                         if (!exists) {
                           showDialog<String>(
                             context: context,

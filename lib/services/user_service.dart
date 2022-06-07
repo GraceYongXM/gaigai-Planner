@@ -10,7 +10,7 @@ class UserService {
 
   UserService(this._client);
 
-  Future<List<model.User>> getNotes() async {
+  Future<List<model.User>> getUsers() async {
     final response = await _client.from(users).select().execute();
     if (response.error == null) {
       final results = response.data as List<dynamic>;
@@ -25,6 +25,7 @@ class UserService {
       result['id'],
       result['username'],
       result['mobileno'],
+      result['email'],
       DateTime.parse(result['createtime']),
     );
   }
