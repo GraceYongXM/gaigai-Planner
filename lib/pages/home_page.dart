@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gaigai_planner/activitylist.dart';
-import 'package:gaigai_planner/profile_page.dart';
+import 'package:gaigai_planner/pages/profile_page.dart';
 
-import './login_page.dart';
+import 'login_page.dart';
+import '../models/user.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key, required this.user}) : super(key: key);
+  final User user;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -63,10 +65,10 @@ class _HomePageState extends State<HomePage>
                   ),
                 );
               } else if (choice == 'Profile') {
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const ProfilePage(),
+                    builder: (context) => ProfilePage(user: widget.user),
                   ),
                 );
               }
