@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import './login_page.dart';
 
-void main() => runApp(GaigaiPlanner());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Supabase.initialize(
+    url: 'https://spyrneyialbtrwiznbyk.supabase.co',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNweXJuZXlpYWxidHJ3aXpuYnlrIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTQyNzY0MzEsImV4cCI6MTk2OTg1MjQzMX0.37N041KOWVkIsL2fW2vo1heYgyBCs0sYxr3uyLhhuT0',
+  );
+  runApp(GaigaiPlanner());
+}
 
 ColorScheme defaultColorScheme = const ColorScheme(
   primary: Color(0xffBB86FC),
