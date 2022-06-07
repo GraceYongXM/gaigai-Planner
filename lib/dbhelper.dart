@@ -55,7 +55,23 @@ class DBHelper {
           mobileNo TEXT,
           password TEXT
         )""";
+    var createEventTable = """CREATE TABLE events(
+          id INTEGER PRIMARY KEY
+        )""";
+    var createFriendTable = """CREATE TABLE friends(
+          id INTEGER PRIMARY KEY,
+          userID INTEGER,
+          friendID INTEGER
+        )""";
+    var createRequestTable = """CREATE TABLE users(
+          id INTEGER PRIMARY KEY,
+          fromID INTEGER,
+          toID INTEGER
+        )""";
     await database.execute(createUserTable);
+    await database.execute(createEventTable);
+    await database.execute(createEventTable);
+    await database.execute(createRequestTable);
   }
 
   Future<List<Activity>> getActivity() async {
