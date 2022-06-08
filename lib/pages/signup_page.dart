@@ -20,17 +20,19 @@ class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _usernameController = TextEditingController();
+  final _mobileNoController = TextEditingController();
   var rememberValue = false;
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _usernameController.dispose();
     super.dispose();
   }
 
-  var dbHelper = DBHelper();
-  late String username, email, password, mobileNo;
+  //var dbHelper = DBHelper();
+  //late String username, email, password, mobileNo;
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +68,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 if (value == null || value.isEmpty) {
                                   return "Please enter your username";
                                 }
-                                username = value;
+                                //username = value;
                                 return null;
                               },
                               maxLines: 1,
@@ -85,13 +87,14 @@ class _RegisterPageState extends State<RegisterPage> {
                         height: 20,
                       ),
                       TextFormField(
+                        controller: _mobileNoController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your number';
                           } else if (value.length != 8) {
                             return "Please enter a valid number";
                           }
-                          mobileNo = value;
+                          //mobileNo = value;
                           return null;
                         },
                         maxLines: 1,
@@ -107,13 +110,14 @@ class _RegisterPageState extends State<RegisterPage> {
                         height: 20,
                       ),
                       TextFormField(
+                        controller: _emailController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your number';
                           } else if (!EmailValidator.validate(value)) {
                             return "Please enter a valid number";
                           }
-                          email = value;
+                          //email = value;
                           return null;
                         },
                         maxLines: 1,
@@ -129,11 +133,12 @@ class _RegisterPageState extends State<RegisterPage> {
                         height: 20,
                       ),
                       TextFormField(
+                        controller: _passwordController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your password';
                           }
-                          password = value;
+                          //password = value;
                           return null;
                         },
                         maxLines: 1,
@@ -152,10 +157,15 @@ class _RegisterPageState extends State<RegisterPage> {
                       ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            setState(() {
+                            /*setState(() {
                               dbHelper.createUser(User(
                                   null, username, email, mobileNo, password));
-                            });
+                            });*/
+                            _supabaseClient.signUpUser(context,
+                                username: _usernameController.text,
+                                phone: _mobileNoController.text,
+                                email: _emailController.text,
+                                password: _passwordController.text);
 
                             showDialog<String>(
                               context: context,

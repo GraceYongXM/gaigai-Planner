@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gaigai_planner/activitylist.dart';
+import 'package:gaigai_planner/pages/event_page.dart';
 import 'package:gaigai_planner/pages/profile_page.dart';
 
-import 'login_page.dart';
+import './login_page.dart';
+import './event_page.dart';
+import './friend_page.dart';
+import './request_page.dart';
 import '../models/user.dart';
 
 class HomePage extends StatefulWidget {
@@ -36,9 +40,18 @@ class _HomePageState extends State<HomePage>
         bottom: TabBar(
           controller: _tabController,
           tabs: const <Widget>[
-            Tab(icon: Icon(Icons.home_rounded)),
-            Tab(icon: Icon(Icons.people_alt_outlined)),
-            Tab(icon: Icon(Icons.local_activity_rounded)),
+            Tab(
+              icon: Icon(Icons.home_rounded),
+              text: 'Events',
+            ),
+            Tab(
+              icon: Icon(Icons.people_alt_outlined),
+              text: 'Friends',
+            ),
+            Tab(
+              icon: Icon(Icons.local_activity_rounded),
+              text: 'Requests',
+            ),
           ],
         ),
         actions: <Widget>[
@@ -79,55 +92,9 @@ class _HomePageState extends State<HomePage>
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
-          Scaffold(
-            body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Text('You have not created any events.',
-                      style: TextStyle(fontSize: 18)),
-                  TextButton(
-                    onPressed: null,
-                    child: Text(
-                      'Create new event',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () => {},
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              tooltip: 'Create new event',
-              child: const Icon(Icons.add),
-            ),
-          ),
-          Scaffold(
-            body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Text('You have not added any friends.',
-                      style: TextStyle(fontSize: 18)),
-                  TextButton(
-                    onPressed: null,
-                    child: Text(
-                      'Add friend',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () => {},
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              tooltip: 'Add friend',
-              child: const Icon(Icons.person_add),
-            ),
-          ),
-          ActivityListPage(),
+          EventPage(user: widget.user),
+          FriendPage(user: widget.user),
+          RequestPage(user: widget.user),
         ],
       ),
     );
