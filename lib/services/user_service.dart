@@ -13,7 +13,9 @@ class UserService {
   final _client = SupabaseClient(supabaseUrl, token);
 
   Future<model.User?> getUser(String username) async {
-    final response = await _client.from(users).select().execute();
+    //log('username $username');
+    final response =
+        await _client.from(users).select().eq('username', username).execute();
     if (response.error == null && response.data != null) {
       final results = response.data as List<dynamic>;
       return results.map((e) => toUser(e)).toList()[0];
