@@ -3,21 +3,47 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/user.dart' as model;
 
+const String supabaseUrl = "https://xvjretabvavhxqyaftsr.supabase.co";
+const String token =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2anJldGFidmF2aHhxeWFmdHNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTQ1OTEzMzYsImV4cCI6MTk3MDE2NzMzNn0.3Iuz9BYCPWVDbELfJa2b_jzU9OVzW95St099K2RS_YU";
+
 class UserService {
   static const users = 'users';
 
-  final SupabaseClient _client;
+  final _client = SupabaseClient(supabaseUrl, token);
 
-  UserService(this._client);
-
-  Future<List<model.User>> getUsers() async {
-    final response = await _client.from(users).select().execute();
+  Future<List<model.User>> getUser(String username) async {
+    final response =
+        await _client.from(users).select().eq('username', username).execute();
     if (response.error == null) {
       final results = response.data as List<dynamic>;
       return results.map((e) => toUser(e)).toList();
     }
     log('Error fetching notes: ${response.error!.message}');
     return [];
+  }
+
+  Future<List<model.User>> getUserFromID(String id) async {
+    final response = await _client.from(users).select().eq('id', id).execute();
+    if (response.error == null) {
+      final results = response.data as List<dynamic>;
+      return results.map((e) => toUser(e)).toList();
+    }
+    log('Error fetching notes: ${response.error!.message}');
+    return [];
+  }
+
+  void insertUser(String username, String phone, String email) async {
+    var response = await _client.from('users').insert({
+      'username': username,
+      'mobileNo': phone,
+      'email': email,
+    }).execute();
+    if (response.error == null) {
+      final results = response.data as List<dynamic>;
+      log('success');
+    }
+    log('Error creating note: ${response.error!.message}');
   }
 
   model.User toUser(Map<String, dynamic> result) {

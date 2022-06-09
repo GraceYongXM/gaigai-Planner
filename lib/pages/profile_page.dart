@@ -47,7 +47,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ];
             },
-            onSelected: (String choice) {
+            /*onSelected: (String choice) {
               if (choice == 'Edit your profile') {
                 Navigator.pushReplacement(
                   context,
@@ -63,7 +63,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 );
               }
-            },
+            },*/
           )
         ],
       ),
