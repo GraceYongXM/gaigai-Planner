@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../services/services.dart';
+import '../services/user_service.dart';
 import 'signup_page.dart';
 import 'home_page.dart';
 import '../dbhelper.dart';
@@ -17,11 +19,47 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   var rememberValue = false;
   bool exists = false;
-  User? user;
+  late User user;
   bool correctPassword = false;
+  final _supabaseClient = UserService();
 
   var dbHelper = DBHelper();
-  late String _username, _password;
+  //late String _username, _password;
+
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  void _signIn() async {
+    final success = await Services.of(context)
+        .authService
+        .signIn(_usernameController.text, _passwordController.text);
+    if (success) {
+      var userInfo = _supabaseClient.getUser(_usernameController.text);
+      user = (await userInfo)[0];
+      await Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (_) => HomePage(
+                    user: user,
+                  )));
+    } else {
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Error'),
+          content: const Text('Incorrect username/ password!'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, 'OK');
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,9 +94,9 @@ class _LoginPageState extends State<LoginPage> {
                         return null;
                       }
                     },
-                    onSaved: (value) {
+                    /*onSaved: (value) {
                       _username = value as String;
-                    },
+                    },*/
                     maxLines: 1,
                     decoration: InputDecoration(
                       hintText: 'Username',
@@ -79,9 +117,9 @@ class _LoginPageState extends State<LoginPage> {
                         return null;
                       }
                     },
-                    onSaved: (value) {
+                    /*onSaved: (value) {
                       _password = value as String;
-                    },
+                    },*/
                     maxLines: 1,
                     obscureText: true,
                     decoration: InputDecoration(
@@ -96,13 +134,14 @@ class _LoginPageState extends State<LoginPage> {
                     height: 20,
                   ),
                   ElevatedButton(
-                    onPressed: () async {
+                    onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
+                        _signIn();
                         /*exists = await dbHelper.userExists(_username) != null;
                         user = await dbHelper.canLogin(_username, _password);
                         correctPassword = user != null;*/
-                        if (!exists) {
+                        /*if (!exists) {
                           showDialog<String>(
                             context: context,
                             builder: (BuildContext context) => AlertDialog(
@@ -119,22 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           );
                         } else if (!correctPassword) {
-                          showDialog<String>(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              title: const Text('Error'),
-                              content:
-                                  const Text('Incorrect username/password!'),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context, 'OK');
-                                  },
-                                  child: const Text('OK'),
-                                ),
-                              ],
-                            ),
-                          );
+                          
                           ;
                         } else {
                           // ignore: use_build_context_synchronously
@@ -145,7 +169,7 @@ class _LoginPageState extends State<LoginPage> {
                                   HomePage(user: user as User),
                             ),
                           );
-                        }
+                        }*/
                       }
                     },
                     style: ElevatedButton.styleFrom(

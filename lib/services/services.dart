@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'auth_service.dart';
+import 'user_service.dart';
+
 class Services extends InheritedWidget {
   final AuthService authService;
-  final NotesService notesService;
+  final UserService userService;
 
   Services._({
     required this.authService,
-    required this.notesService,
+    required this.userService,
     required Widget child,
   }) : super(child: child);
 
@@ -15,10 +18,10 @@ class Services extends InheritedWidget {
     final client = SupabaseClient('https://xvjretabvavhxqyaftsr.supabase.co',
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2anJldGFidmF2aHhxeWFmdHNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTQ1OTEzMzYsImV4cCI6MTk3MDE2NzMzNn0.3Iuz9BYCPWVDbELfJa2b_jzU9OVzW95St099K2RS_YU');
     final authService = AuthService(client.auth);
-    final notesService = NotesService(client);
+    final userService = UserService();
     return Services._(
       authService: authService,
-      notesService: notesService,
+      userService: userService,
       child: child,
     );
   }

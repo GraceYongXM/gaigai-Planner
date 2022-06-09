@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gaigai_planner/pages/home_page.dart';
 import 'package:gaigai_planner/pages/signup_page.dart';
+import 'package:gaigai_planner/services/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'pages/login_page.dart';
+import 'models/user.dart' as model;
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await Supabase.initialize(
-    url: 'https://xvjretabvavhxqyaftsr.supabase.co',
-    anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2anJldGFidmF2aHhxeWFmdHNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTQ1OTEzMzYsImV4cCI6MTk3MDE2NzMzNn0.3Iuz9BYCPWVDbELfJa2b_jzU9OVzW95St099K2RS_YU',
-  );
   runApp(GaigaiPlanner());
 }
 
@@ -33,22 +28,47 @@ ColorScheme defaultColorScheme = const ColorScheme(
 class GaigaiPlanner extends StatelessWidget {
   const GaigaiPlanner({Key? key}) : super(key: key);
 
+  //model.User user;
+
+  /*void recoverUser(context) async {
+    user = await Services.of(context).authService.recoverUser() as model.User;
+    setState(() {
+      activityList = _activityList;
+    });
+  }*/
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'gaigaiPlanner',
-      initialRoute: 'login',
-      routes: {
-        'login': (_) => const LoginPage(title: 'Login UI'),
-        '/signup': (_) => const RegisterPage(title: 'Register UI'),
-      },
-      theme: ThemeData(
-        colorScheme: defaultColorScheme,
-        primarySwatch: Colors.blue,
-      ),
-      home: const LoginPage(title: 'Login UI'),
+    return Services(
+      child: MaterialApp(
+          title: 'gaigaiPlanner',
+          initialRoute: 'login',
+          routes: {
+            'login': (_) => const LoginPage(title: 'Login UI'),
+            '/signup': (_) => const RegisterPage(title: 'Register UI'),
+          },
+          theme: ThemeData(
+            colorScheme: defaultColorScheme,
+            primarySwatch: Colors.blue,
+          ),
+          home: LoginPage(
+            title: 'Login UI',
+          )
+          /*Builder(
+          builder: (context) {
+            return FutureBuilder<bool>(
+                future: Services.of(context).authService.recoverSession(),
+                builder: (context, snapshot) {
+                  final sessionRecovered = snapshot.data ?? false;
+                  
+                  return sessionRecovered
+                      ? HomePage(user: user)
+                      : LoginPage(title: 'Login UI');
+                });
+          },*/
+          ),
       //home: ActivityListPage(),
-      debugShowCheckedModeBanner: false,
+      //debugShowCheckedModeBanner: false,
     );
   }
 }

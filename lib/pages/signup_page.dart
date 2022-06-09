@@ -1,10 +1,9 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
-import '../supabase_manager.dart';
+import '../services/services.dart';
+import '../services/user_service.dart';
 import 'login_page.dart';
-import '../dbhelper.dart';
-import '../models/user.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key, required this.title}) : super(key: key);
@@ -16,7 +15,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
-  final _supabaseClient = SupabaseManager();
+  final _supabaseClient = UserService();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _usernameController = TextEditingController();
@@ -28,7 +27,43 @@ class _RegisterPageState extends State<RegisterPage> {
     _emailController.dispose();
     _passwordController.dispose();
     _usernameController.dispose();
+    _mobileNoController.dispose();
     super.dispose();
+  }
+
+  void _signUp() async {
+    final success = await Services.of(context)
+        .authService
+        .signUp(_mobileNoController.text, _passwordController.text);
+    if (success) {
+      _supabaseClient.insertUser(_usernameController.text,
+          _mobileNoController.text, _emailController.text);
+
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Success'),
+          content: const Text('You have created an account!'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, 'OK');
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LoginPage(title: 'Login UI'),
+                  ),
+                );
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Something went wrong.')));
+    }
   }
 
   //var dbHelper = DBHelper();
@@ -113,9 +148,9 @@ class _RegisterPageState extends State<RegisterPage> {
                         controller: _emailController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your number';
+                            return 'Please enter your email';
                           } else if (!EmailValidator.validate(value)) {
-                            return "Please enter a valid number";
+                            return "Please enter a valid email";
                           }
                           //email = value;
                           return null;
@@ -161,35 +196,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               dbHelper.createUser(User(
                                   null, username, email, mobileNo, password));
                             });*/
-                            _supabaseClient.signUpUser(context,
-                                username: _usernameController.text,
-                                phone: _mobileNoController.text,
-                                email: _emailController.text,
-                                password: _passwordController.text);
-
-                            showDialog<String>(
-                              context: context,
-                              builder: (BuildContext context) => AlertDialog(
-                                title: const Text('Success'),
-                                content:
-                                    const Text('You have created an account!'),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context, 'OK');
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => const LoginPage(
-                                              title: 'Login UI'),
-                                        ),
-                                      );
-                                    },
-                                    child: const Text('OK'),
-                                  ),
-                                ],
-                              ),
-                            );
+                            _signUp();
                           }
                         },
                         style: ElevatedButton.styleFrom(

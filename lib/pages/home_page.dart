@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:gaigai_planner/activitylist.dart';
+
 import 'package:gaigai_planner/pages/event_page.dart';
 import 'package:gaigai_planner/pages/profile_page.dart';
-
+import '../services/services.dart';
 import './login_page.dart';
 import './event_page.dart';
 import './friend_page.dart';
@@ -25,6 +25,21 @@ class _HomePageState extends State<HomePage>
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, initialIndex: 0, vsync: this);
+  }
+
+  Future<void> _signOut(BuildContext context) async {
+    final success = await Services.of(context).authService.signOut();
+    if (success) {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (_) => LoginPage(
+                    title: 'Login UI',
+                  )));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('There was an issue logging out.')));
+    }
   }
 
   @override
@@ -71,12 +86,9 @@ class _HomePageState extends State<HomePage>
             },
             onSelected: (String choice) {
               if (choice == 'Log out') {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const LoginPage(title: 'Login UI'),
-                  ),
-                );
+                () async {
+                  await _signOut(context);
+                };
               } else if (choice == 'Profile') {
                 Navigator.pushReplacement(
                   context,
