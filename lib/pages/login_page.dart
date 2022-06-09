@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import '../services/services.dart';
@@ -19,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   var rememberValue = false;
   bool exists = false;
-  late User user;
+  User? user;
   bool correctPassword = false;
   final _supabaseClient = UserService();
 
@@ -30,24 +32,13 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
 
   void _signIn() async {
-    final success = await Services.of(context)
-        .authService
-        .signIn(_usernameController.text, _passwordController.text);
-    if (success) {
-      var userInfo = _supabaseClient.getUser(_usernameController.text);
-      user = (await userInfo)[0];
-      await Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (_) => HomePage(
-                    user: user,
-                  )));
-    } else {
+    user = await _supabaseClient.getUser(_usernameController.text);
+    if (user == null) {
       showDialog<String>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
           title: const Text('Error'),
-          content: const Text('Incorrect username/ password!'),
+          content: const Text('Username does not exist!'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -58,6 +49,39 @@ class _LoginPageState extends State<LoginPage> {
           ],
         ),
       );
+    } else {
+      final success = await Services.of(context)
+          .authService
+          .signIn(user!.mobileNo, _passwordController.text);
+
+      if (success) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Successfully logged in.')));
+        await Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => HomePage(
+              user: user!,
+            ),
+          ),
+        );
+      } else {
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Error'),
+            content: const Text('Incorrect username/ password!'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, 'OK');
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
     }
   }
 
@@ -87,6 +111,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 children: [
                   TextFormField(
+                    controller: _usernameController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your username';
@@ -110,6 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 20,
                   ),
                   TextFormField(
+                    controller: _passwordController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your password';

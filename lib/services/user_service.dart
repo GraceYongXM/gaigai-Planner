@@ -12,15 +12,15 @@ class UserService {
 
   final _client = SupabaseClient(supabaseUrl, token);
 
-  Future<List<model.User>> getUser(String username) async {
-    final response =
-        await _client.from(users).select().eq('username', username).execute();
-    if (response.error == null) {
+  Future<model.User?> getUser(String username) async {
+    final response = await _client.from(users).select().execute();
+    if (response.error == null && response.data != null) {
       final results = response.data as List<dynamic>;
-      return results.map((e) => toUser(e)).toList();
+      return results.map((e) => toUser(e)).toList()[0];
+    } else {
+      log('Error fetching notes: ${response.error!.message}');
+      return null;
     }
-    log('Error fetching notes: ${response.error!.message}');
-    return [];
   }
 
   Future<List<model.User>> getUserFromID(String id) async {
@@ -42,17 +42,18 @@ class UserService {
     if (response.error == null) {
       final results = response.data as List<dynamic>;
       log('success');
+    } else {
+      log('Error creating note: ${response.error!.message}');
     }
-    log('Error creating note: ${response.error!.message}');
   }
 
   model.User toUser(Map<String, dynamic> result) {
     return model.User(
       result['id'],
       result['username'],
-      result['mobileno'],
+      result['mobileNo'],
       result['email'],
-      DateTime.parse(result['createtime']),
+      DateTime.parse(result['createTime']),
     );
   }
 }

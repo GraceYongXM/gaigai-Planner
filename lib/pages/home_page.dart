@@ -21,25 +21,22 @@ class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
+  void _signOut() async {
+    await Services.of(context).authService.signOut();
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text('Successfully signed out.')));
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const LoginPage(title: 'Login UI'),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, initialIndex: 0, vsync: this);
-  }
-
-  Future<void> _signOut(BuildContext context) async {
-    final success = await Services.of(context).authService.signOut();
-    if (success) {
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (_) => LoginPage(
-                    title: 'Login UI',
-                  )));
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('There was an issue logging out.')));
-    }
   }
 
   @override
@@ -86,9 +83,7 @@ class _HomePageState extends State<HomePage>
             },
             onSelected: (String choice) {
               if (choice == 'Log out') {
-                () async {
-                  await _signOut(context);
-                };
+                _signOut();
               } else if (choice == 'Profile') {
                 Navigator.pushReplacement(
                   context,

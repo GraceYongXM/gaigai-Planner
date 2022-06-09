@@ -1,6 +1,6 @@
 class User {
-  late int? id;
-  late String username, mobileNo, email;
+  //late int? id;
+  late String id, username, mobileNo, email;
   late DateTime createTime;
 
   User(
