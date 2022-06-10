@@ -66,6 +66,7 @@ class UserService {
       'username': username,
       'mobileNo': phone,
       'email': email,
+      'display_name': username,
     }).execute();
     if (response.error == null) {
       final results = response.data as List<dynamic>;
@@ -82,6 +83,8 @@ class UserService {
       result['mobileNo'],
       result['email'],
       DateTime.parse(result['createTime']),
+      result['displayName'],
+      result['bio'],
     );
   }
 }

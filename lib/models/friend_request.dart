@@ -1,14 +1,15 @@
-class Request {
+class FriendRequest {
   late int? id;
   late int fromID, toID;
+  late DateTime requestDate;
 
-  Request(
+  FriendRequest(
     this.id,
     this.fromID,
     this.toID,
   );
 
-  Request.fromMap(dynamic obj) {
+  FriendRequest.fromMap(dynamic obj) {
     id = obj['id'];
     fromID = obj['fromID'];
     toID = obj['toID'];
