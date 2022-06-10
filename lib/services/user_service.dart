@@ -13,15 +13,41 @@ class UserService {
   final _client = SupabaseClient(supabaseUrl, token);
 
   Future<model.User?> getUser(String username) async {
-    //log('username $username');
+    log('username $username');
     final response =
         await _client.from(users).select().eq('username', username).execute();
     if (response.error == null && response.data != null) {
       final results = response.data as List<dynamic>;
-      return results.map((e) => toUser(e)).toList()[0];
+      if (results.isNotEmpty) {
+        return results.map((e) => toUser(e)).toList()[0];
+      }
     } else {
       log('Error fetching notes: ${response.error!.message}');
-      return null;
+    }
+    return null;
+  }
+
+  Future<bool> uniqueUsername(String username) async {
+    final response =
+        await _client.from(users).select().eq('username', username).execute();
+    if (response.error == null && response.data != null) {
+      final results = response.data as List<dynamic>;
+      return results.isEmpty;
+    } else {
+      log('Error fetching notes: ${response.error!.message}');
+      return false;
+    }
+  }
+
+  Future<bool> uniqueNumber(String number) async {
+    final response =
+        await _client.from(users).select().eq('mobileNo', number).execute();
+    if (response.error == null && response.data != null) {
+      final results = response.data as List<dynamic>;
+      return results.isEmpty;
+    } else {
+      log('Error fetching notes: ${response.error!.message}');
+      return false;
     }
   }
 

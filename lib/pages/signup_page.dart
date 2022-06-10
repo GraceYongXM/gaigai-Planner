@@ -21,6 +21,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final _usernameController = TextEditingController();
   final _mobileNoController = TextEditingController();
   var rememberValue = false;
+  late bool username, phone;
 
   @override
   void dispose() {
@@ -31,7 +32,45 @@ class _RegisterPageState extends State<RegisterPage> {
     super.dispose();
   }
 
-  void _signUp() async {
+  Future<void> _validate() async {
+    username = await _supabaseClient.uniqueUsername(_usernameController.text);
+    phone = await _supabaseClient.uniqueNumber(_mobileNoController.text);
+    if (!username) {
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Error'),
+          content: const Text('Username must be unique!'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, 'OK');
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    } else if (!phone) {
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Error'),
+          content: const Text('Mobile number must be unique!'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, 'OK');
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  Future<void> _signUp() async {
     final success = await Services.of(context)
         .authService
         .signUp(_mobileNoController.text, _passwordController.text);
@@ -60,9 +99,6 @@ class _RegisterPageState extends State<RegisterPage> {
           ],
         ),
       );
-    } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Something went wrong.')));
     }
   }
 
@@ -172,8 +208,9 @@ class _RegisterPageState extends State<RegisterPage> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your password';
+                          } else if (value.length < 6) {
+                            return 'Password must be at least 6 characters';
                           }
-                          //password = value;
                           return null;
                         },
                         maxLines: 1,
@@ -190,13 +227,14 @@ class _RegisterPageState extends State<RegisterPage> {
                         height: 20,
                       ),
                       ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             /*setState(() {
                               dbHelper.createUser(User(
                                   null, username, email, mobileNo, password));
                             });*/
-                            _signUp();
+                            await _validate();
+                            await _signUp();
                           }
                         },
                         style: ElevatedButton.styleFrom(
