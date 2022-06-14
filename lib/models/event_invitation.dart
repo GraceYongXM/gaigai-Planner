@@ -1,10 +1,11 @@
 class EventInvitation {
-  late String id, eventID;
-  late DateTime requestDate;
+  String userID, eventID, status;
+  DateTime requestDate;
 
   EventInvitation(
-    this.id,
+    this.userID,
     this.eventID,
+    this.status,
     this.requestDate,
   );
 }

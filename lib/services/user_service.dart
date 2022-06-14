@@ -83,7 +83,7 @@ class UserService {
       result['mobileNo'],
       result['email'],
       DateTime.parse(result['createTime']),
-      result['displayName'],
+      result['display_name'],
       result['bio'],
     );
   }

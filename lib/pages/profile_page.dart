@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:gaigai_planner/pages/edit_profile_page.dart';
+//import 'package:gaigai_planner/pages/edit_profile_page.dart';
 
 import './home_page.dart';
 import '../models/user.dart';
-import './edit_profile_page.dart';
-import './edit_password_page.dart';
+//import './edit_profile_page.dart';
+//import './edit_password_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key, required this.user}) : super(key: key);
@@ -28,7 +28,7 @@ class _ProfilePageState extends State<ProfilePage> {
           onPressed: () => Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => HomePage(user: widget.user as User),
+              builder: (context) => HomePage(user: widget.user),
             ),
           ),
         ),

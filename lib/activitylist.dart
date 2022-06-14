@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 
-import './dbhelper.dart';
 import 'models/activity.dart';
 
 List<Activity> activityList = [];
@@ -13,7 +12,7 @@ class ActivityListPage extends StatefulWidget {
 }
 
 class _ActivityListPageState extends State<ActivityListPage> {
-  var dbHelper = DBHelper();
+  
 
   @override
   void initState() {
@@ -71,4 +70,4 @@ child: ListView.separated(
                   color: Colors.purple,
                 ),
             itemCount: activityList == null ? 0 : activityList.length),
-            */
+            */*/

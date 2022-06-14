@@ -1,21 +1,95 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
+import '../models/user.dart';
+import '../services/friend_service.dart';
+import 'home_page.dart';
 
 class FriendInfoPage extends StatelessWidget {
-  const FriendInfoPage(
+  FriendInfoPage(
       {Key? key,
+      required this.user,
+      required this.friendID,
       required this.friendTime,
       required this.displayName,
       required this.bio,
       required this.username})
       : super(key: key);
   final DateTime friendTime;
-  final String username, displayName;
+  final User user;
+  final String friendID, username, displayName;
   final String? bio;
+  final _supabaseClient = FriendService();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_rounded,
+            color: Colors.white,
+          ),
+          onPressed: () => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(user: user),
+            ),
+          ),
+        ),
+        actions: <Widget>[
+          PopupMenuButton<String>(
+            itemBuilder: (BuildContext context) {
+              return <PopupMenuItem<String>>[
+                const PopupMenuItem<String>(
+                  value: 'Delete friend',
+                  child: Text('Delete friend'),
+                ),
+              ];
+            },
+            onSelected: (String choice) {
+              if (choice == 'Delete friend') {
+                showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    content: Text('Delete friend $displayName?'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => HomePage(
+                                user: user!,
+                              ),
+                            ),
+                          );
+                        },
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          _supabaseClient.deleteFriend(user.id, friendID);
+                          Navigator.pop(context);
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomePage(
+                                user: user,
+                              ),
+                            ),
+                          );
+                        },
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
+          )
+        ],
+      ),
       body: Container(
         child: Column(
           children: <Widget>[
@@ -57,7 +131,7 @@ class FriendInfoPage extends StatelessWidget {
                 ),
               ),
               subtitle: Text(
-                (bio!.isEmpty) ? 'nil' : bio!,
+                (bio == null) ? 'nil' : bio!,
                 style: const TextStyle(
                   fontSize: 15,
                 ),

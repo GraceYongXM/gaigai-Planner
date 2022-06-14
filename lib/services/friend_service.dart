@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'package:flutter/cupertino.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'user_service.dart';
@@ -11,6 +10,28 @@ class FriendService {
   final _client = SupabaseClient('https://xvjretabvavhxqyaftsr.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2anJldGFidmF2aHhxeWFmdHNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTQ1OTEzMzYsImV4cCI6MTk3MDE2NzMzNn0.3Iuz9BYCPWVDbELfJa2b_jzU9OVzW95St099K2RS_YU');
 
+  void deleteFriend(String fromID, String toID) async {
+    final delete1 = await _client
+        .from('friends')
+        .delete(returning: ReturningOption.minimal)
+        .eq('id', fromID)
+        .eq('friend_id', toID)
+        .execute();
+    log(delete1.error == null
+        ? 'delete1 success'
+        : 'Error in delete1: ${delete1.error!.message}');
+
+    final delete2 = await _client
+        .from('friends')
+        .delete(returning: ReturningOption.minimal)
+        .eq('id', toID)
+        .eq('friend_id', fromID)
+        .execute();
+    log(delete2.error == null
+        ? 'delete2 success'
+        : 'Error in delete2: ${delete2.error!.message}');
+  }
+
   Future<List<String>> getFriendIDs(String id) async {
     final response = await _client
         .from('friends')
@@ -20,7 +41,7 @@ class FriendService {
     if (response.error == null) {
       final results = response.data as List<dynamic>;
       List<String> friendIDs =
-          results.map((e) => e['friendID'] as String).toList();
+          results.map((e) => e['friend_id'] as String).toList();
       if (friendIDs.isNotEmpty) {
         return friendIDs;
       }
@@ -30,21 +51,17 @@ class FriendService {
     return [];
   }
 
-  Future<List<DateTime>> getFriendTimes(String id) async {
-    final response = await _client
-        .from('friends')
-        .select('friend_time')
-        .eq('id', id)
-        .execute();
+  Future<List<Friend>> getFriends(String id) async {
+    final response =
+        await _client.from('friends').select().eq('id', id).execute();
     if (response.error == null) {
       final results = response.data as List<dynamic>;
-      List<DateTime> friendTimes =
-          results.map((e) => DateTime.parse(e['friendTime'])).toList();
-      if (friendTimes.isNotEmpty) {
-        return friendTimes;
+      List<Friend> friendDates = results.map((e) => toFriend(e)).toList();
+      if (friendDates.isNotEmpty) {
+        return friendDates;
       }
     } else {
-      log('Error in getFriendTimes: ${response.error!.message}');
+      log('Error in getFriends: ${response.error!.message}');
     }
     return [];
   }
@@ -68,8 +85,8 @@ class FriendService {
   Friend toFriend(Map<String, dynamic> result) {
     return Friend(
       result['id'],
-      result['friendID'],
-      DateTime.parse(result['friendTime']),
+      result['friend_id'],
+      DateTime.parse(result['friend_time']),
     );
   }
 }

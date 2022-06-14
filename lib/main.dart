@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:gaigai_planner/pages/home_page.dart';
 import 'package:gaigai_planner/pages/signup_page.dart';
 import 'package:gaigai_planner/services/services.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'pages/login_page.dart';
-import 'models/user.dart' as model;
 
 Future<void> main() async {
   runApp(GaigaiPlanner());
