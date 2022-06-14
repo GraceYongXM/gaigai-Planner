@@ -60,7 +60,7 @@ class FriendInfoPage extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (_) => HomePage(
-                                user: user!,
+                                user: user,
                               ),
                             ),
                           );

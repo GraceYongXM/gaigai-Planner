@@ -138,8 +138,6 @@ class _FriendPageState extends State<FriendPage> {
               } else {
                 exists = !(await _userService.uniqueNumber(text));
               }
-              print(exists);
-              print(_controller.text);
               if (!exists) {
                 showDialog<String>(
                   context: context,
