@@ -32,14 +32,14 @@ class _ProfilePageState extends State<ProfilePage> {
         centerTitle: true,
         title: Text(widget.user.username),
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_rounded,
             color: Colors.white,
           ),
           onPressed: () => Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => HomePage(user: widget.user as User),
+              builder: (context) => HomePage(user: widget.user),
             ),
           ),
         ),
