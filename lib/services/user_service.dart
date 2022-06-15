@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:gaigai_planner/pages/edit_profile%20pages/edit_username.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/user.dart' as model;
@@ -40,12 +41,14 @@ class UserService {
       'username': username,
       'mobileNo': phone,
       'email': email,
+      'display_name': 'display name',
+      'bio': 'bio',
     }).execute();
     if (response.error == null) {
       final results = response.data as List<dynamic>;
       log('success');
     } else {
-      log('Error creating note: ${response.error!.message}');
+      log('Error inserting user: ${response.error!.message}');
     }
   }
 
@@ -55,7 +58,53 @@ class UserService {
       result['username'],
       result['mobileNo'],
       result['email'],
+      result['display_name'],
+      result['bio'],
       DateTime.parse(result['createTime']),
     );
+  }
+
+  void updateUsername(String newUsername, String oldUsername) async {
+    var response = await _client.from(users).update(
+        {'username': newUsername}).match({'username': oldUsername}).execute();
+    if (response.error == null) {
+      log('success');
+    } else {
+      log('Error updating username: ${response.error!.message}');
+    }
+  }
+
+  void updateDisplayName(String newDisplayName, String oldDisplayName) async {
+    var response = await _client
+        .from(users)
+        .update({'display_name': newDisplayName}).match(
+            {'display_name': oldDisplayName}).execute();
+    if (response.error == null) {
+      log('success');
+    } else {
+      log('Error updating display name: ${response.error!.message}');
+    }
+  }
+
+  void updateEmail(String newEmail, String oldEmail) async {
+    var response = await _client
+        .from(users)
+        .update({'email': newEmail}).match({'email': oldEmail}).execute();
+    if (response.error == null) {
+      log('success');
+    } else {
+      log('Error updating email: ${response.error!.message}');
+    }
+  }
+
+  void updateBio(String newBio, String oldBio) async {
+    var response = await _client
+        .from(users)
+        .update({'bio': newBio}).match({'bio': oldBio}).execute();
+    if (response.error == null) {
+      log('success');
+    } else {
+      log('Error updating bio: ${response.error!.message}');
+    }
   }
 }

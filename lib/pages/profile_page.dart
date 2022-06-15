@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gaigai_planner/pages/edit_profile_page.dart';
 
 import './home_page.dart';
 import '../models/user.dart';
-import './edit_profile_page.dart';
-import './edit_password_page.dart';
+import 'edit_profile pages/edit_password.dart';
+import 'edit_profile pages/edit_profile_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key, required this.user}) : super(key: key);
@@ -15,11 +14,23 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  String displayName(String? displayName) {
+    if (displayName == null) return 'Display Name';
+    return displayName;
+  }
+
+  String bio(String? bio) {
+    if (bio == null) return 'Bio';
+    return bio;
+  }
+
+  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Your Profile'),
+        centerTitle: true,
+        title: Text(widget.user.username),
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_rounded,
@@ -47,38 +58,42 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ];
             },
-            /*onSelected: (String choice) {
+            onSelected: (String choice) {
               if (choice == 'Edit your profile') {
-                Navigator.pushReplacement(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => EditProfilePage(user: widget.user),
+                    builder: (context) => EditProfilePage(
+                      user: widget.user,
+                      displayName: displayName(widget.user.displayName),
+                      bio: bio(widget.user.bio),
+                    ),
                   ),
                 );
               } else if (choice == 'Change password') {
-                Navigator.pushReplacement(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => EditPasswordPage(user: widget.user),
+                    builder: (context) => EditPassword(user: widget.user),
                   ),
                 );
               }
-            },*/
+            },
           )
         ],
       ),
-      body: Container(
+      body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             ListTile(
               title: const Text(
-                'Username',
+                'Display Name',
                 style: TextStyle(
                   fontSize: 18,
                 ),
               ),
               subtitle: Text(
-                widget.user.username,
+                displayName(widget.user.displayName),
                 style: const TextStyle(
                   fontSize: 15,
                 ),
@@ -87,7 +102,7 @@ class _ProfilePageState extends State<ProfilePage> {
             const Divider(),
             ListTile(
               title: const Text(
-                'Mobile number',
+                'Mobile Number',
                 style: TextStyle(
                   fontSize: 18,
                 ),
@@ -102,13 +117,28 @@ class _ProfilePageState extends State<ProfilePage> {
             const Divider(),
             ListTile(
               title: const Text(
-                'Email address',
+                'Email Address',
                 style: TextStyle(
                   fontSize: 18,
                 ),
               ),
               subtitle: Text(
                 widget.user.email,
+                style: const TextStyle(
+                  fontSize: 15,
+                ),
+              ),
+            ),
+            const Divider(),
+            ListTile(
+              title: const Text(
+                'Bio',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+              subtitle: Text(
+                bio(widget.user.bio),
                 style: const TextStyle(
                   fontSize: 15,
                 ),
