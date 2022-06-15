@@ -3,7 +3,6 @@ import 'package:gaigai_planner/pages/edit_profile%20pages/edit_bio.dart';
 import 'package:gaigai_planner/pages/edit_profile%20pages/edit_displayname.dart';
 import 'package:gaigai_planner/pages/login_page.dart';
 
-import '../../dbhelper.dart';
 import '../../models/user.dart';
 import 'edit_email.dart';
 import 'edit_username.dart';
@@ -25,7 +24,6 @@ class EditProfilePage extends StatefulWidget {
 class _EditProfilePageState extends State<EditProfilePage> {
   final _formKey = GlobalKey<FormState>();
 
-  var dbHelper = DBHelper();
   late String username, email, mobileNo;
 
   @override

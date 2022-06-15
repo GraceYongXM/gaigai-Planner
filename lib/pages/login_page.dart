@@ -25,9 +25,6 @@ class _LoginPageState extends State<LoginPage> {
   bool correctPassword = false;
   final _supabaseClient = UserService();
 
-  var dbHelper = DBHelper();
-  //late String _username, _password;
-
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
