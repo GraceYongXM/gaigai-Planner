@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:gaigai_planner/pages/event_page.dart';
 import 'package:gaigai_planner/pages/profile_page.dart';
 import '../services/services.dart';
 import './login_page.dart';

@@ -1,12 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 
 import '../services/services.dart';
 import '../services/user_service.dart';
 import 'signup_page.dart';
 import 'home_page.dart';
-import '../dbhelper.dart';
 import '../models/user.dart';
 
 class LoginPage extends StatefulWidget {
@@ -19,12 +16,9 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  var rememberValue = false;
-  bool exists = false;
   User? user;
-  bool correctPassword = false;
-  final _supabaseClient = UserService();
 
+  final _supabaseClient = UserService();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -116,9 +110,6 @@ class _LoginPageState extends State<LoginPage> {
                         return null;
                       }
                     },
-                    /*onSaved: (value) {
-                      _username = value as String;
-                    },*/
                     maxLines: 1,
                     decoration: InputDecoration(
                       hintText: 'Username',
@@ -140,9 +131,6 @@ class _LoginPageState extends State<LoginPage> {
                         return null;
                       }
                     },
-                    /*onSaved: (value) {
-                      _password = value as String;
-                    },*/
                     maxLines: 1,
                     obscureText: true,
                     decoration: InputDecoration(
@@ -161,38 +149,6 @@ class _LoginPageState extends State<LoginPage> {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
                         _signIn();
-                        /*exists = await dbHelper.userExists(_username) != null;
-                        user = await dbHelper.canLogin(_username, _password);
-                        correctPassword = user != null;*/
-                        /*if (!exists) {
-                          showDialog<String>(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              title: const Text('Error'),
-                              content: const Text('Username does not exist'),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context, 'OK');
-                                  },
-                                  child: const Text('OK'),
-                                ),
-                              ],
-                            ),
-                          );
-                        } else if (!correctPassword) {
-                          
-                          ;
-                        } else {
-                          // ignore: use_build_context_synchronously
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  HomePage(user: user as User),
-                            ),
-                          );
-                        }*/
                       }
                     },
                     style: ElevatedButton.styleFrom(

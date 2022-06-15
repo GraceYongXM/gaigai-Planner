@@ -1,17 +1,15 @@
 import 'dart:core';
 
 class Activity {
-  int id;
-  String name, type, location;
+  String activityID, name, type, location, description;
   double cost;
-  double? travelTime;
 
   Activity(
-    this.id,
+    this.activityID,
     this.name,
     this.type,
     this.location,
     this.cost,
-    this.travelTime,
+    this.description,
   );
 }
