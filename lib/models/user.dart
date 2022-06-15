@@ -1,5 +1,6 @@
 class User {
-  late String id, username, mobileNo, email, displayName, bio;
+  late String id, username, mobileNo, email, displayName;
+  late String? bio;
   late DateTime createTime;
 
   User(

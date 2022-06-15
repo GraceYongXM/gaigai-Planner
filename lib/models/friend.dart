@@ -1,5 +1,5 @@
 class Friend {
-  int id, friendID;
+  String id, friendID;
   DateTime friendTime;
 
   Friend(

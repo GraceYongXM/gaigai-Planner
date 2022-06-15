@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:gaigai_planner/pages/edit_profile_page.dart';
+//import 'package:gaigai_planner/pages/edit_profile_page.dart';
 
 import './home_page.dart';
 import '../models/user.dart';
-import './edit_profile_page.dart';
-import './edit_password_page.dart';
+//import './edit_profile_page.dart';
+//import './edit_password_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key, required this.user}) : super(key: key);
@@ -21,14 +21,14 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         title: const Text('Your Profile'),
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_rounded,
             color: Colors.white,
           ),
           onPressed: () => Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => HomePage(user: widget.user as User),
+              builder: (context) => HomePage(user: widget.user),
             ),
           ),
         ),

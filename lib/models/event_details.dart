@@ -1,8 +1,7 @@
 import 'dart:core';
 
 class EventDetails {
-  int eventID;
-  String name, description;
+  String eventID, name, description;
 
   EventDetails(
     this.eventID,
