@@ -79,4 +79,24 @@ class AuthService {
       return null;
     }
   }
+
+  Future<bool> updateUserEmail(String email) async {
+    final response = await _client.update(UserAttributes(email: email));
+    if (response.error == null) {
+      log('Update was successful for user ID: ${response.user!.id}');
+      return true;
+    }
+    log('Update error: ${response.error!.message}');
+    return false;
+  }
+
+  Future<bool> updateUserPassword(String password) async {
+    final response = await _client.update(UserAttributes(password: password));
+    if (response.error == null) {
+      log('Update was successful for user ID: ${response.user!.id}');
+      return true;
+    }
+    log('Update error: ${response.error!.message}');
+    return false;
+  }
 }

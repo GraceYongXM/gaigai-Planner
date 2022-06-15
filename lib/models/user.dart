@@ -1,4 +1,5 @@
 class User {
+
   late String id, username, mobileNo, email, displayName;
   late String? bio;
   late DateTime createTime;
@@ -8,9 +9,9 @@ class User {
     this.username,
     this.mobileNo,
     this.email,
-    this.createTime,
     this.displayName,
     this.bio,
+    this.createTime,
   );
 
   User.fromMap(dynamic obj) {
@@ -18,9 +19,9 @@ class User {
     username = obj['username'];
     mobileNo = obj['mobileNo'];
     email = obj['email'];
-    createTime = DateTime.parse(obj['createTime']);
-    displayName = obj['displayName'];
+    displayName = obj['display_name'];
     bio = obj['bio'];
+    createTime = DateTime.parse(obj['createTime']);
   }
 
   Map<String, dynamic> toMap() {
@@ -29,9 +30,9 @@ class User {
       "username": username,
       "mobileNo": mobileNo,
       "email": email,
-      "createTime": createTime,
-      "displayName": displayName,
+      "display_name": displayName,
       "bio": bio,
+      "createTime": createTime,
     };
   }
 }
