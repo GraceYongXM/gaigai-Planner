@@ -145,4 +145,14 @@ class UserService {
       log('Error updating bio: ${response.error!.message}');
     }
   }
+
+  void updateMobileNo(String newMobileNo, String oldMobileNo) async {
+    var response = await _client.from(users).update(
+        {'mobileNo': newMobileNo}).match({'mobileNo': oldMobileNo}).execute();
+    if (response.error == null) {
+      log('success');
+    } else {
+      log('Error updating mobileNo: ${response.error!.message}');
+    }
+  }
 }

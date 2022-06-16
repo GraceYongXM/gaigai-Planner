@@ -1,9 +1,14 @@
+import 'dart:developer';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:gaigai_planner/pages/login_page.dart';
 
 import '../../models/user.dart';
+import '../../services/services.dart';
 import '../../services/user_service.dart';
 import '../profile_page.dart';
+import 'edit_profile_page.dart';
 
 class EditEmail extends StatefulWidget {
   const EditEmail({Key? key, required this.user}) : super(key: key);
@@ -20,7 +25,15 @@ class _EditEmailState extends State<EditEmail> {
   User? user;
   late bool isUnique;
 
-  void updateEmail(String newEmail, String oldEmail) {
+  Future<void> updateEmail(String newEmail, String oldEmail) async {
+    final success =
+        await Services.of(context).authService.updateUserEmail(newEmail);
+    if (success) {
+      log('success email update');
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Update email error')));
+    }
     _supabaseClient.updateEmail(newEmail, oldEmail);
   }
 
@@ -28,6 +41,19 @@ class _EditEmailState extends State<EditEmail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_rounded),
+          onPressed: () => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EditProfilePage(
+                user: widget.user,
+                displayName: widget.user.displayName,
+                bio: widget.user.bio,
+              ),
+            ),
+          ),
+        ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
@@ -58,14 +84,14 @@ class _EditEmailState extends State<EditEmail> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ProfilePage(
-                      user: user!,
+                    builder: (context) => const LoginPage(
+                      title: 'hi',
                     ),
                   ),
                 );
               }
             },
-            icon: Icon(Icons.done),
+            icon: const Icon(Icons.done),
           ),
         ],
       ),

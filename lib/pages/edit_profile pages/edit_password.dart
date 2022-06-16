@@ -1,11 +1,9 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:gaigai_planner/pages/login_page.dart';
 
 import '../../models/user.dart';
 import '../../services/services.dart';
-import '../../services/user_service.dart';
+import '../login_page.dart';
 import '../profile_page.dart';
 
 class EditPassword extends StatefulWidget {
@@ -28,7 +26,7 @@ class _EditPasswordState extends State<EditPassword> {
       log('success password update');
     } else {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Something went wrong.')));
+          .showSnackBar(SnackBar(content: Text('Update password error')));
     }
   }
 
@@ -36,6 +34,17 @@ class _EditPasswordState extends State<EditPassword> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_rounded),
+          onPressed: () => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const LoginPage(
+                title: 'pls remove title',
+              ),
+            ),
+          ),
+        ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
@@ -57,14 +66,14 @@ class _EditPasswordState extends State<EditPassword> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => LoginPage(
+                    builder: (context) => const LoginPage(
                       title: 'wheee',
                     ),
                   ),
                 );
               }
             },
-            icon: Icon(Icons.done),
+            icon: const Icon(Icons.done),
           ),
         ],
       ),
