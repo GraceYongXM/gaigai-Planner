@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       final success = await Services.of(context)
           .authService
-          .signIn(user!.mobileNo, _passwordController.text);
+          .signIn(user!.email, _passwordController.text);
 
       if (success) {
         ScaffoldMessenger.of(context)

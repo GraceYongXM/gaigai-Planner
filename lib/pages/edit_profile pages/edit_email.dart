@@ -18,6 +18,7 @@ class _EditEmailState extends State<EditEmail> {
   final newEmailController = TextEditingController();
   final _supabaseClient = UserService();
   User? user;
+  late bool isUnique;
 
   void updateEmail(String newEmail, String oldEmail) {
     _supabaseClient.updateEmail(newEmail, oldEmail);
@@ -77,13 +78,21 @@ class _EditEmailState extends State<EditEmail> {
               helperText: 'Enter your new email',
               contentPadding: EdgeInsets.all(20),
             ),
+            onChanged: (text) async {
+              var isUniqueAsync = await _supabaseClient.uniqueEmail(text);
+              setState(() {
+                isUnique = isUniqueAsync;
+              });
+            },
             validator: (String? value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter new email';
               } else if (!EmailValidator.validate(value)) {
-                return "Please enter a valid email";
+                return 'Please enter a valid email';
               } else if (value == widget.user.email) {
                 return 'No change in email';
+              } else if (!isUnique) {
+                return 'Email is taken';
               }
               return null;
             }),

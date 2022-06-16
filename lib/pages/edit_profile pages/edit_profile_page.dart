@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gaigai_planner/pages/edit_profile%20pages/edit_bio.dart';
 import 'package:gaigai_planner/pages/edit_profile%20pages/edit_displayname.dart';
 import 'package:gaigai_planner/pages/login_page.dart';
+import 'package:gaigai_planner/pages/profile_page.dart';
 
 import '../../models/user.dart';
 import 'edit_email.dart';
@@ -30,6 +31,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_rounded),
+          onPressed: () => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProfilePage(
+                user: widget.user,
+              ),
+            ),
+          ),
+        ),
         centerTitle: true,
         title: const Text('Edit Your Profile'),
       ),
@@ -48,7 +60,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               Container(
                 child: GestureDetector(
                   child: Text(widget.user.username),
-                  onTap: () => Navigator.push(
+                  onTap: () => Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) => EditUsername(

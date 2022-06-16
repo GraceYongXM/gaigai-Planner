@@ -20,11 +20,12 @@ class _RegisterPageState extends State<RegisterPage> {
   final _passwordController = TextEditingController();
   final _usernameController = TextEditingController();
   final _mobileNoController = TextEditingController();
-  late bool username, phone;
+  late bool username, phone, email;
 
   Future<void> _validate() async {
     username = await _supabaseClient.uniqueUsername(_usernameController.text);
     phone = await _supabaseClient.uniqueNumber(_mobileNoController.text);
+    email = await _supabaseClient.uniqueEmail(_emailController.text);
     if (!username) {
       showDialog<String>(
         context: context,
@@ -57,13 +58,29 @@ class _RegisterPageState extends State<RegisterPage> {
           ],
         ),
       );
+    } else if (!email) {
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Error'),
+          content: const Text('Email must be unique!'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, 'OK');
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
     }
   }
 
   Future<void> _signUp() async {
     final success = await Services.of(context)
         .authService
-        .signUp(_mobileNoController.text, _passwordController.text);
+        .signUp(_emailController.text, _passwordController.text);
     if (success) {
       _supabaseClient.insertUser(_usernameController.text,
           _mobileNoController.text, _emailController.text);

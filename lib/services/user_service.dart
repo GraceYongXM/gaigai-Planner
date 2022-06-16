@@ -52,6 +52,18 @@ class UserService {
     }
   }
 
+  Future<bool> uniqueEmail(String email) async {
+    final response =
+        await _client.from(users).select().eq('email', email).execute();
+    if (response.error == null && response.data != null) {
+      final results = response.data as List<dynamic>;
+      return results.isEmpty;
+    } else {
+      log('Error uniqueEmail: ${response.error!.message}');
+      return false;
+    }
+  }
+
   Future<List<model.User>> getUserFromID(String id) async {
     final response = await _client.from(users).select().eq('id', id).execute();
     if (response.error == null) {
@@ -68,7 +80,7 @@ class UserService {
       'mobileNo': phone,
       'email': email,
       'display_name': username,
-      'bio': 'bio',
+      'bio': '',
     }).execute();
     if (response.error == null) {
       final results = response.data as List<dynamic>;
