@@ -71,7 +71,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 );
               } else if (choice == 'Change password') {
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => EditPassword(user: widget.user),

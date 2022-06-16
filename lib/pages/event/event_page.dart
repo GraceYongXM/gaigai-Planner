@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/user.dart';
+import '../../models/user.dart';
 
 class EventPage extends StatefulWidget {
   const EventPage({Key? key, required this.user}) : super(key: key);
