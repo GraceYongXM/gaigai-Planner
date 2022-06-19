@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/user.dart' as model;
@@ -287,6 +286,8 @@ class RequestService {
       result['event_id'],
       result['name'],
       result['description'],
+      DateTime.parse(result['start_date']),
+      DateTime.parse(result['end_date']),
     );
   }
 }

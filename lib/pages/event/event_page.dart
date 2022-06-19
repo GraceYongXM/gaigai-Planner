@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gaigai_planner/pages/event/create_event.dart';
 
 import '../../models/user.dart';
 
@@ -17,11 +18,20 @@ class _EventPageState extends State<EventPage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Text('You have not created any events.',
                 style: TextStyle(fontSize: 18)),
             TextButton(
-              onPressed: null,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CreateEvent(
+                      user: widget.user,
+                    ),
+                  ),
+                );
+              },
               child: Text(
                 'Create new event',
                 style: TextStyle(fontSize: 18),
@@ -31,7 +41,16 @@ class _EventPageState extends State<EventPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => {},
+        onPressed: () => {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CreateEvent(
+                user: widget.user,
+              ),
+            ),
+          )
+        },
         backgroundColor: Theme.of(context).colorScheme.primary,
         tooltip: 'Create new event',
         child: const Icon(Icons.add),

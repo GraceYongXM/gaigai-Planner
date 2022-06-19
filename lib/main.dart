@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:gaigai_planner/pages/signup_page.dart';
+import 'package:gaigai_planner/signin_signup/signup_page.dart';
 import 'package:gaigai_planner/services/services.dart';
 
-import 'pages/login_page.dart';
+import 'signin_signup/login_page.dart';
 
 Future<void> main() async {
   runApp(GaigaiPlanner());

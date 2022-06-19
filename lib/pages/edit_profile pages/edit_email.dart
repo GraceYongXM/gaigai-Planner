@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:gaigai_planner/pages/login_page.dart';
+import 'package:gaigai_planner/signin_signup/login_page.dart';
 
 import '../../models/user.dart';
 import '../../services/services.dart';
