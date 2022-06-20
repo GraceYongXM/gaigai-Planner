@@ -284,6 +284,7 @@ class RequestService {
   EventDetails toEvent(Map<String, dynamic> result) {
     return EventDetails(
       result['event_id'],
+      result['owner_id'],
       result['name'],
       result['description'],
       DateTime.parse(result['start_date']),

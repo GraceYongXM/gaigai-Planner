@@ -1,13 +1,14 @@
 import 'dart:core';
 
 class EventDetails {
-  String eventID, name;
+  String eventID, ownerID, name;
   String? description;
   DateTime startDate;
   DateTime endDate;
 
   EventDetails(
     this.eventID,
+    this.ownerID,
     this.name,
     this.description,
     this.startDate,

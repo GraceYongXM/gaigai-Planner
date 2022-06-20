@@ -65,9 +65,9 @@ class _CreateEventState extends State<CreateEvent> {
     });
   }
 
-  void createEvent(String name, String? description, DateTime startDate,
-      DateTime endDate) async {
-    eventService.createEvent(name, description, startDate, endDate);
+  void createEvent(String name, String ownerID, String? description,
+      DateTime startDate, DateTime endDate) async {
+    eventService.createEvent(name, ownerID, description, startDate, endDate);
   }
 
   @override
@@ -205,6 +205,7 @@ class _CreateEventState extends State<CreateEvent> {
                   if (_formKey.currentState!.validate()) {
                     createEvent(
                       nameController.text,
+                      widget.user.id,
                       descriptionController.text,
                       start,
                       end,
