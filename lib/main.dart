@@ -37,7 +37,6 @@ class GaigaiPlanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //test();
     extractData();
     return Services(
       child: MaterialApp(

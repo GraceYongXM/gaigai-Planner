@@ -19,25 +19,25 @@ class AuthService {
     await prefs.setString(supabaseSessionKey, session.persistSessionString);
   }
 
-  Future<bool> signUp(String phone, String password) async {
-    final response = await _client.signUpWithPhone(phone, password);
+  Future<bool> signUp(String email, String password) async {
+    final response = await _client.signUp(email, password);
     if (response.error == null) {
       log('Sign up was successful for user ID: ${response.user!.id}');
-      _persistSession(response.data!);
+      //_persistSession(response.data!);
       return true;
     }
     log('Sign up error: ${response.error!.message}');
     return false;
   }
 
-  Future<bool> signIn(String phone, String password) async {
-    final response = await _client.signIn(phone: phone, password: password);
+  Future<bool> signIn(String email, String password) async {
+    final response = await _client.signIn(email: email, password: password);
     if (response.error == null) {
       log('Sign in was successful for user ID: ${response.user!.id}');
       _persistSession(response.data!);
       return true;
     }
-    log('phone: ${phone} password: ${password}');
+    log('email: ${email} password: ${password}');
     log('Sign in error: ${response.error!.message}');
     return false;
   }
@@ -83,20 +83,20 @@ class AuthService {
   Future<bool> updateUserEmail(String email) async {
     final response = await _client.update(UserAttributes(email: email));
     if (response.error == null) {
-      log('Update was successful for user ID: ${response.user!.id}');
+      log('Email update was successful for user ID: ${response.user!.id}');
       return true;
     }
-    log('Update error: ${response.error!.message}');
+    log('Update email error: ${response.error!.message}');
     return false;
   }
 
   Future<bool> updateUserPassword(String password) async {
     final response = await _client.update(UserAttributes(password: password));
     if (response.error == null) {
-      log('Update was successful for user ID: ${response.user!.id}');
+      log('Password update was successful for user ID: ${response.user!.id}');
       return true;
     }
-    log('Update error: ${response.error!.message}');
+    log('Update password error: ${response.error!.message}');
     return false;
   }
 }

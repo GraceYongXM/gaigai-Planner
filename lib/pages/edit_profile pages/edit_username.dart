@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:gaigai_planner/pages/edit_profile%20pages/edit_profile_page.dart';
 import 'package:gaigai_planner/pages/profile_page.dart';
 
 import '../../models/user.dart';
@@ -21,6 +22,7 @@ class _EditUsernameState extends State<EditUsername> {
   final newUsernameController = TextEditingController();
   final _supabaseClient = UserService();
   User? user;
+  late bool isUnique;
 
   void updateUsername(String newUsername, String oldUsername) {
     _supabaseClient.updateUsername(newUsername, oldUsername);
@@ -30,6 +32,19 @@ class _EditUsernameState extends State<EditUsername> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_rounded),
+          onPressed: () => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EditProfilePage(
+                user: widget.user,
+                displayName: widget.user.displayName,
+                bio: widget.user.bio,
+              ),
+            ),
+          ),
+        ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
@@ -81,11 +96,19 @@ class _EditUsernameState extends State<EditUsername> {
               helperText: 'Enter your desired username',
               contentPadding: EdgeInsets.all(20),
             ),
+            onChanged: (text) async {
+              var isUniqueAsync = await _supabaseClient.uniqueUsername(text);
+              setState(() {
+                isUnique = isUniqueAsync;
+              });
+            },
             validator: (String? value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter new username';
               } else if (value == widget.username) {
                 return 'No change in username';
+              } else if (!isUnique) {
+                return 'Username is taken';
               }
               return null;
             }),

@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/user.dart' as model;
@@ -277,6 +276,7 @@ class RequestService {
     return EventInvitation(
       result['user_id'],
       result['event_id'],
+      result['requester_id'],
       result['status'],
       DateTime.parse(result['request_date']),
     );
@@ -285,8 +285,11 @@ class RequestService {
   EventDetails toEvent(Map<String, dynamic> result) {
     return EventDetails(
       result['event_id'],
+      result['owner_id'],
       result['name'],
       result['description'],
+      DateTime.parse(result['start_date']),
+      DateTime.parse(result['end_date']),
     );
   }
 }

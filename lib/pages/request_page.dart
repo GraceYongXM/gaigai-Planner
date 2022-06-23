@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gaigai_planner/pages/event_info_page.dart';
+import 'package:gaigai_planner/pages/event/event_info_page.dart';
 import 'package:gaigai_planner/pages/requested_friend_info_page.dart';
 
 import '../services/request_service.dart';
@@ -152,8 +152,8 @@ class _RequestPageState extends State<RequestPage> {
                           context,
                           MaterialPageRoute(
                             builder: (_) => EventInfoPage(
-                              invitationDate: invitations[index].requestDate,
-                              description: eventInfo[index].description,
+                              invitationDate: invitations[index].requestDate!,
+                              description: eventInfo[index].description ?? ' ',
                               name: eventInfo[index].name,
                             ),
                           ),
@@ -166,7 +166,7 @@ class _RequestPageState extends State<RequestPage> {
                         ],
                       ),
                       subtitle: Text(invitations[index]
-                          .requestDate
+                          .requestDate!
                           .toIso8601String()
                           .substring(0, 10)),
                       trailing: Row(

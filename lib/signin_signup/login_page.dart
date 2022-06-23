@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../services/services.dart';
 import '../services/user_service.dart';
 import 'signup_page.dart';
-import 'home_page.dart';
+import '../pages/home_page.dart';
 import '../models/user.dart';
 
 class LoginPage extends StatefulWidget {
@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       final success = await Services.of(context)
           .authService
-          .signIn(user!.mobileNo, _passwordController.text);
+          .signIn(user!.email, _passwordController.text);
 
       if (success) {
         ScaffoldMessenger.of(context)

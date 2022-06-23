@@ -1,10 +1,11 @@
 class EventInvitation {
-  String userID, eventID, status;
-  DateTime requestDate;
+  String userID, eventID, requesterID, status;
+  DateTime? requestDate;
 
   EventInvitation(
     this.userID,
     this.eventID,
+    this.requesterID,
     this.status,
     this.requestDate,
   );
