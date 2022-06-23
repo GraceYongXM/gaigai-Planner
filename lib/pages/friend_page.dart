@@ -23,11 +23,13 @@ class _FriendPageState extends State<FriendPage> {
   List<String> friendIDs = [];
   List<Friend> friends = [];
   List<User> friendInfo = [];
+  bool isLoading = false;
 
   final _controller = TextEditingController();
 
   @override
   void initState() {
+    isLoading = true;
     super.initState();
     getFriends(widget.user.id);
   }
@@ -42,11 +44,14 @@ class _FriendPageState extends State<FriendPage> {
     List<String> _friendIDs = await _supabaseClient.getFriendIDs(id);
     List<Friend> _friends = await _supabaseClient.getFriends(id);
     List<User> _friendInfo = await _supabaseClient.getFriendInfo(_friendIDs);
-    setState(() {
-      friendIDs = _friendIDs;
-      friends = _friends;
-      friendInfo = _friendInfo;
-    });
+    if (this.mounted) {
+      setState(() {
+        friendIDs = _friendIDs;
+        friends = _friends;
+        friendInfo = _friendInfo;
+        isLoading = false;
+      });
+    }
   }
 
   String dropdownValue = 'Username';
@@ -270,39 +275,41 @@ class _FriendPageState extends State<FriendPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      body: (friendIDs.isEmpty)
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('You have not added any friends.',
-                      style: TextStyle(fontSize: 18)),
-                  TextButton(
-                    onPressed: () async {
-                      await sendRequest();
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : (friendIDs.isEmpty)
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('You have not added any friends.',
+                          style: TextStyle(fontSize: 18)),
+                      TextButton(
+                        onPressed: () async {
+                          await sendRequest();
+                        },
+                        child: const Text(
+                          'Add friend',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: ListView.builder(
+                    itemCount: friendIDs.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return FriendTile(
+                        user: widget.user,
+                        index: index,
+                        friendInfo: friendInfo,
+                        friends: friends,
+                      );
                     },
-                    child: const Text(
-                      'Add friend',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  )
-                ],
-              ),
-            )
-          : Padding(
-              padding: const EdgeInsets.all(10),
-              child: ListView.builder(
-                itemCount: friendIDs.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return FriendTile(
-                    user: widget.user,
-                    index: index,
-                    friendInfo: friendInfo,
-                    friends: friends,
-                  );
-                },
-              ),
-            ),
+                  ),
+                ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await sendRequest();

@@ -5,10 +5,11 @@ class EventInfoPage extends StatelessWidget {
       {Key? key,
       required this.invitationDate,
       required this.description,
+      required this.requesterName,
       required this.name})
       : super(key: key);
   final DateTime invitationDate;
-  final String name, description;
+  final String name, description, requesterName;
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +18,15 @@ class EventInfoPage extends StatelessWidget {
       body: Container(
         child: Column(
           children: <Widget>[
+            ListTile(
+              title: Text(
+                'You have been invited by $requesterName!',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+            ),
+            const Divider(),
             ListTile(
               title: const Text(
                 'Event name',
