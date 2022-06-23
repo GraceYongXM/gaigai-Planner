@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'pages/signin_signup/login_page.dart';
+import 'pages/signin_signup/signup_page.dart';
 import 'webscrape.dart';
-import 'pages/login_page.dart';
-import 'pages/signup_page.dart';
 import 'services/services.dart';
 
 Future<void> main() async {

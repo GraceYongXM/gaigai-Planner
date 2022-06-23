@@ -1,8 +1,8 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
-import '../services/services.dart';
-import '../services/user_service.dart';
+import '../../services/services.dart';
+import '../../services/user_service.dart';
 import 'login_page.dart';
 
 class RegisterPage extends StatefulWidget {

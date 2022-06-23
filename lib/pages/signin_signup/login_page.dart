@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../services/services.dart';
-import '../services/user_service.dart';
+import '../../models/user.dart';
+import '../../services/services.dart';
+import '../../services/user_service.dart';
+import '../home_page.dart';
 import 'signup_page.dart';
-import '../pages/home_page.dart';
-import '../models/user.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key, required this.title}) : super(key: key);
