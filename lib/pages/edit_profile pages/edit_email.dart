@@ -2,12 +2,11 @@ import 'dart:developer';
 
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:gaigai_planner/signin_signup/login_page.dart';
 
 import '../../models/user.dart';
 import '../../services/services.dart';
 import '../../services/user_service.dart';
-import '../profile_page.dart';
+import '../signin_signup/login_page.dart';
 import 'edit_profile_page.dart';
 
 class EditEmail extends StatefulWidget {

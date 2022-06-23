@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:gaigai_planner/pages/profile_page.dart';
 import '../services/services.dart';
-import '../signin_signup/login_page.dart';
 import 'event/event_page.dart';
 import './friend_page.dart';
 import './request_page.dart';
 import '../models/user.dart';
+import 'signin_signup/login_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.user}) : super(key: key);

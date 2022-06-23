@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 import '../../models/user.dart';
 import '../../services/services.dart';
-import '../../signin_signup/login_page.dart';
 import '../profile_page.dart';
+import '../signin_signup/login_page.dart';
 
 class EditPassword extends StatefulWidget {
   const EditPassword({Key? key, required this.user}) : super(key: key);
