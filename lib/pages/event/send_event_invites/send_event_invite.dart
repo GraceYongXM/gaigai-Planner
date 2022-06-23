@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:gaigai_planner/models/event_details.dart';
 
 import '../../../models/friend.dart';
 import '../../../models/user.dart';
-import '../../../services/friend_service.dart';
 import 'invite_friend.dart';
 import 'invite_others.dart';
 
 class sendEventInvite extends StatefulWidget {
-  const sendEventInvite(
-      {super.key,
-      required this.user,
-      required this.friendIDs,
-      required this.friends,
-      required this.friendInfo});
+  const sendEventInvite({
+    super.key,
+    required this.user,
+    required this.friendIDs,
+    required this.friends,
+    required this.friendInfo,
+    required this.event,
+  });
   final User user;
   final List<String> friendIDs;
   final List<Friend> friends;
   final List<User> friendInfo;
+  final EventDetails event;
 
   @override
   State<sendEventInvite> createState() => _sendEventInviteState();
@@ -24,13 +27,12 @@ class sendEventInvite extends StatefulWidget {
 
 class _sendEventInviteState extends State<sendEventInvite>
     with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-  final _supabaseClient = FriendService();
+  late TabController tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, initialIndex: 0, vsync: this);
+    tabController = TabController(length: 2, initialIndex: 0, vsync: this);
   }
 
   @override
@@ -40,7 +42,7 @@ class _sendEventInviteState extends State<sendEventInvite>
         centerTitle: true,
         title: const Text('Send Event Invites'),
         bottom: TabBar(
-          controller: _tabController,
+          controller: tabController,
           tabs: const <Widget>[
             Tab(
               text: 'Friends',
@@ -52,15 +54,20 @@ class _sendEventInviteState extends State<sendEventInvite>
         ),
       ),
       body: TabBarView(
-        controller: _tabController,
+        controller: tabController,
         children: <Widget>[
           inviteFriend(
             user: widget.user,
             friendIDs: widget.friendIDs,
             friends: widget.friends,
             friendInfo: widget.friendInfo,
+            event: widget.event,
+            tabController: tabController,
           ),
-          inviteOthers(),
+          inviteOthers(
+            event: widget.event,
+            user: widget.user,
+          ),
         ],
       ),
     );

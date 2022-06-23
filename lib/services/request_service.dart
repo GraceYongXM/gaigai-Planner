@@ -276,6 +276,7 @@ class RequestService {
     return EventInvitation(
       result['user_id'],
       result['event_id'],
+      result['requester_id'],
       result['status'],
       DateTime.parse(result['request_date']),
     );

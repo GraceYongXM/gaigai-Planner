@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:gaigai_planner/models/event_details.dart';
 import 'package:gaigai_planner/pages/event/send_event_invites/send_event_invite.dart';
 import 'package:gaigai_planner/services/event_service.dart';
 import 'package:intl/intl.dart';
@@ -65,9 +66,11 @@ class _CreateEventState extends State<CreateEvent> {
     });
   }
 
-  void createEvent(String name, String ownerID, String? description,
-      DateTime startDate, DateTime endDate) async {
-    eventService.createEvent(name, ownerID, description, startDate, endDate);
+  Future<List<EventDetails>> createEvent(String name, String ownerID,
+      String? description, DateTime startDate, DateTime endDate) async {
+    var eventID = await eventService.createEvent(
+        name, ownerID, description, startDate, endDate);
+    return eventService.getEventDetails(eventID);
   }
 
   @override
@@ -201,15 +204,15 @@ class _CreateEventState extends State<CreateEvent> {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    createEvent(
+                    var eventDetails = (await createEvent(
                       nameController.text,
                       widget.user.id,
                       descriptionController.text,
                       start,
                       end,
-                    );
+                    ))[0];
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -218,6 +221,7 @@ class _CreateEventState extends State<CreateEvent> {
                           friendIDs: friendIDs,
                           friends: friends,
                           friendInfo: friendInfo,
+                          event: eventDetails,
                         ),
                       ),
                     );

@@ -152,7 +152,7 @@ class _RequestPageState extends State<RequestPage> {
                           context,
                           MaterialPageRoute(
                             builder: (_) => EventInfoPage(
-                              invitationDate: invitations[index].requestDate,
+                              invitationDate: invitations[index].requestDate!,
                               description: eventInfo[index].description ?? ' ',
                               name: eventInfo[index].name,
                             ),
@@ -166,7 +166,7 @@ class _RequestPageState extends State<RequestPage> {
                         ],
                       ),
                       subtitle: Text(invitations[index]
-                          .requestDate
+                          .requestDate!
                           .toIso8601String()
                           .substring(0, 10)),
                       trailing: Row(

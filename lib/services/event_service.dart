@@ -8,7 +8,7 @@ class EventService {
   final _client = SupabaseClient('https://xvjretabvavhxqyaftsr.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2anJldGFidmF2aHhxeWFmdHNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTQ1OTEzMzYsImV4cCI6MTk3MDE2NzMzNn0.3Iuz9BYCPWVDbELfJa2b_jzU9OVzW95St099K2RS_YU');
 
-  void createEvent(String name, String ownerID, String? description,
+  Future<String> createEvent(String name, String ownerID, String? description,
       DateTime startDate, DateTime endDate) async {
     var response = await _client.from('events_details').insert({
       'name': name,
@@ -23,7 +23,9 @@ class EventService {
       log('Error in createEvent: ${response.error!.message}');
     }
     var eventID = await getEventID(ownerID, name);
+    log('eventID in createEvent: $eventID');
     addOwnerToEvent(eventID, ownerID);
+    return eventID;
   }
 
   Future<String> getEventID(String ownerID, String name) async {
@@ -53,6 +55,24 @@ class EventService {
     } else {
       log('Error in addOwnerToEvent: ${response.error!.message}');
     }
+  }
+
+  Future<List<EventDetails>> getEventDetails(String eventID) async {
+    final response = await _client
+        .from('events_details')
+        .select()
+        .eq('event_id', eventID)
+        .execute();
+    if (response.error == null) {
+      final results = response.data as List<dynamic>;
+      List<EventDetails> eventDetails = results.map((e) => toEvent(e)).toList();
+      if (eventDetails.isNotEmpty) {
+        return eventDetails;
+      }
+    } else {
+      log('Error in getEventDetails: ${response.error!.message}');
+    }
+    return [];
   }
 
   EventDetails toEvent(Map<String, dynamic> result) {
