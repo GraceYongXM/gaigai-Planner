@@ -20,12 +20,17 @@ class _FriendPageState extends State<FriendPage> {
   final _userService = UserService();
   final _requestService = RequestService();
   final _supabaseClient = FriendService();
+
   List<String> friendIDs = [];
   List<Friend> friends = [];
   List<User> friendInfo = [];
+  List<Friend> displayedFriends = [];
+  List<User> displayedFriendInfo = [];
+
   bool isLoading = false;
 
   final _controller = TextEditingController();
+  final _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -38,17 +43,21 @@ class _FriendPageState extends State<FriendPage> {
   void dispose() {
     super.dispose();
     _controller.dispose();
+    _searchController.dispose();
   }
 
   void getFriends(String id) async {
     List<String> _friendIDs = await _supabaseClient.getFriendIDs(id);
     List<Friend> _friends = await _supabaseClient.getFriends(id);
     List<User> _friendInfo = await _supabaseClient.getFriendInfo(_friendIDs);
+
     if (this.mounted) {
       setState(() {
         friendIDs = _friendIDs;
         friends = _friends;
         friendInfo = _friendInfo;
+        displayedFriends = _friends;
+        displayedFriendInfo = _friendInfo;
         isLoading = false;
       });
     }
@@ -271,13 +280,46 @@ class _FriendPageState extends State<FriendPage> {
     );
   }
 
+  void searchFriend(String query) {
+    if (query == '') {
+      if (this.mounted) {
+        setState(() {
+          displayedFriends = friends;
+          displayedFriendInfo = friendInfo;
+        });
+      }
+    } else {
+      final suggestions =
+          List.generate(friends.length, (index) => index).where((index) {
+        final displayName = friendInfo[index].displayName.toLowerCase();
+        final input = query.toLowerCase();
+
+        return displayName.contains(input);
+      }).toList();
+
+      List<Friend> newDisplayedFriends = [];
+      List<User> newDisplayedFriendInfo = [];
+
+      for (int i in suggestions) {
+        newDisplayedFriends.add(friends[i]);
+        newDisplayedFriendInfo.add(friendInfo[i]);
+      }
+      if (this.mounted) {
+        setState(() {
+          displayedFriends = newDisplayedFriends;
+          displayedFriendInfo = newDisplayedFriendInfo;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
-          : (friendIDs.isEmpty)
+          : (friends.isEmpty)
               ? Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -297,17 +339,37 @@ class _FriendPageState extends State<FriendPage> {
                   ),
                 )
               : Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: ListView.builder(
-                    itemCount: friendIDs.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return FriendTile(
-                        user: widget.user,
-                        index: index,
-                        friendInfo: friendInfo,
-                        friends: friends,
-                      );
-                    },
+                  padding: const EdgeInsets.all(15),
+                  child: Column(
+                    children: [
+                      TextField(
+                        autofocus: false,
+                        controller: _searchController,
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.search),
+                          hintText: 'Search friend',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        onChanged: searchFriend,
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          keyboardDismissBehavior:
+                              ScrollViewKeyboardDismissBehavior.onDrag,
+                          itemCount: displayedFriends.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return FriendTile(
+                              user: widget.user,
+                              index: index,
+                              friendInfo: displayedFriendInfo,
+                              friends: displayedFriends,
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ),
       floatingActionButton: FloatingActionButton(

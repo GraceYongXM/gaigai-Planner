@@ -38,20 +38,23 @@ class GaigaiPlanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     extractData();
-    return Services(
-      child: MaterialApp(
-        title: 'gaigaiPlanner',
-        initialRoute: 'login',
-        routes: {
-          'login': (_) => const LoginPage(title: 'Login UI'),
-          '/signup': (_) => const RegisterPage(title: 'Register UI'),
-        },
-        theme: ThemeData(
-          colorScheme: defaultColorScheme,
-          primarySwatch: Colors.blue,
-        ),
-        home: LoginPage(
-          title: 'Login UI',
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Services(
+        child: MaterialApp(
+          title: 'gaigaiPlanner',
+          initialRoute: 'login',
+          routes: {
+            'login': (_) => const LoginPage(title: 'Login UI'),
+            '/signup': (_) => const RegisterPage(title: 'Register UI'),
+          },
+          theme: ThemeData(
+            colorScheme: defaultColorScheme,
+            primarySwatch: Colors.blue,
+          ),
+          home: LoginPage(
+            title: 'Login UI',
+          ),
         ),
       ),
     );

@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage>
               text: 'Friends',
             ),
             Tab(
-              icon: Icon(Icons.local_activity_rounded),
+              icon: Icon(Icons.mail),
               text: 'Requests',
             ),
           ],

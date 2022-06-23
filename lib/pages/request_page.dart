@@ -93,6 +93,7 @@ class _RequestPageState extends State<RequestPage> {
 
   @override
   Widget build(BuildContext context) {
+    FocusManager.instance.primaryFocus?.unfocus();
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),

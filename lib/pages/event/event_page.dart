@@ -38,6 +38,7 @@ class _EventPageState extends State<EventPage> {
 
   @override
   Widget build(BuildContext context) {
+    FocusManager.instance.primaryFocus?.unfocus();
     return Scaffold(
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
