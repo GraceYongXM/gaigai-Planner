@@ -42,6 +42,8 @@ dependencies:
   supabase: ^0.3.4+1
   gotrue: ^0.2.2
   shared_preferences: ^2.0.15
+  http: ^0.13.4
+  html: ^0.15.0
 
 dev_dependencies:
   flutter_test:

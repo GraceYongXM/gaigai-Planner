@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:gaigai_planner/pages/edit_profile%20pages/edit_bio.dart';
-import 'package:gaigai_planner/pages/edit_profile%20pages/edit_displayname.dart';
-import 'package:gaigai_planner/pages/edit_profile%20pages/edit_mobileNo.dart';
-import 'package:gaigai_planner/signin_signup/login_page.dart';
-import 'package:gaigai_planner/pages/profile_page.dart';
 
+import 'package:gaigai_planner/pages/profile_page.dart';
 import '../../models/user.dart';
 import 'edit_email.dart';
 import 'edit_username.dart';
+import 'package:gaigai_planner/pages/edit_profile%20pages/edit_bio.dart';
+import 'package:gaigai_planner/pages/edit_profile%20pages/edit_displayname.dart';
+import 'package:gaigai_planner/pages/edit_profile%20pages/edit_mobileNo.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage(

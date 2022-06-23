@@ -11,12 +11,13 @@ class FriendInfoPage extends StatelessWidget {
       required this.friendID,
       required this.friendTime,
       required this.displayName,
+      required this.mobileNo,
       required this.bio,
       required this.username})
       : super(key: key);
   final DateTime friendTime;
   final User user;
-  final String friendID, username, displayName;
+  final String friendID, username, displayName, mobileNo;
   final String? bio;
   final _supabaseClient = FriendService();
 
@@ -24,6 +25,8 @@ class FriendInfoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
+        title: Text(username),
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back_rounded,
@@ -95,13 +98,13 @@ class FriendInfoPage extends StatelessWidget {
           children: <Widget>[
             ListTile(
               title: const Text(
-                'Username',
+                'Display Name',
                 style: TextStyle(
                   fontSize: 18,
                 ),
               ),
               subtitle: Text(
-                username,
+                displayName,
                 style: const TextStyle(
                   fontSize: 15,
                 ),
@@ -110,13 +113,13 @@ class FriendInfoPage extends StatelessWidget {
             const Divider(),
             ListTile(
               title: const Text(
-                'Display name',
+                'Mobile Number',
                 style: TextStyle(
                   fontSize: 18,
                 ),
               ),
               subtitle: Text(
-                displayName,
+                mobileNo,
                 style: const TextStyle(
                   fontSize: 15,
                 ),
@@ -140,7 +143,7 @@ class FriendInfoPage extends StatelessWidget {
             const Divider(),
             ListTile(
               title: const Text(
-                'Friend date',
+                'Friend Date',
                 style: TextStyle(
                   fontSize: 18,
                 ),

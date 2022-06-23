@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gaigai_planner/signin_signup/signup_page.dart';
-import 'package:gaigai_planner/services/services.dart';
 
-import 'signin_signup/login_page.dart';
+import 'webscrape.dart';
+import 'pages/login_page.dart';
+import 'pages/signup_page.dart';
+import 'services/services.dart';
 
 Future<void> main() async {
   runApp(GaigaiPlanner());
@@ -23,7 +24,7 @@ ColorScheme defaultColorScheme = const ColorScheme(
 );
 
 class GaigaiPlanner extends StatelessWidget {
-  const GaigaiPlanner({Key? key}) : super(key: key);
+  GaigaiPlanner({Key? key}) : super(key: key);
 
   //model.User user;
 
@@ -36,22 +37,25 @@ class GaigaiPlanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    extractData();
     return Services(
       child: MaterialApp(
-          title: 'gaigaiPlanner',
-          initialRoute: 'login',
-          routes: {
-            'login': (_) => const LoginPage(title: 'Login UI'),
-            '/signup': (_) => const RegisterPage(title: 'Register UI'),
-          },
-          theme: ThemeData(
-            colorScheme: defaultColorScheme,
-            primarySwatch: Colors.blue,
-          ),
-          home: LoginPage(
-            title: 'Login UI',
-          )
-          /*Builder(
+        title: 'gaigaiPlanner',
+        initialRoute: 'login',
+        routes: {
+          'login': (_) => const LoginPage(title: 'Login UI'),
+          '/signup': (_) => const RegisterPage(title: 'Register UI'),
+        },
+        theme: ThemeData(
+          colorScheme: defaultColorScheme,
+          primarySwatch: Colors.blue,
+        ),
+        home: LoginPage(
+          title: 'Login UI',
+        ),
+      ),
+    );
+    /*Builder(
           builder: (context) {
             return FutureBuilder<bool>(
                 future: Services.of(context).authService.recoverSession(),
@@ -63,9 +67,8 @@ class GaigaiPlanner extends StatelessWidget {
                       : LoginPage(title: 'Login UI');
                 });
           },*/
-          ),
-      //home: ActivityListPage(),
-      //debugShowCheckedModeBanner: false,
-    );
+
+    //home: ActivityListPage(),
+    //debugShowCheckedModeBanner: false,
   }
 }
