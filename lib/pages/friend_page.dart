@@ -344,6 +344,7 @@ class FriendTile extends StatelessWidget {
                   friendID: friendInfo[index].id,
                   friendTime: friends[index].friendTime,
                   displayName: friendInfo[index].displayName,
+                  mobileNo: friendInfo[index].mobileNo,
                   bio: friendInfo[index].bio,
                   username: friendInfo[index].username,
                 ),

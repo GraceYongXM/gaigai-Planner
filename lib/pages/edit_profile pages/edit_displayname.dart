@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../models/user.dart';
 import '../../services/user_service.dart';
 import '../profile_page.dart';
+import 'edit_profile_page.dart';
 
 class EditDisplayName extends StatefulWidget {
   const EditDisplayName(
@@ -29,6 +30,19 @@ class _EditDisplayNameState extends State<EditDisplayName> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_rounded),
+          onPressed: () => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EditProfilePage(
+                user: widget.user,
+                displayName: widget.user.displayName,
+                bio: widget.user.bio,
+              ),
+            ),
+          ),
+        ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,

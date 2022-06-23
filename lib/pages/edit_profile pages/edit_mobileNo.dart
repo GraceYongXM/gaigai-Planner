@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 import '../../models/user.dart';
@@ -7,24 +6,23 @@ import '../../services/user_service.dart';
 import '../profile_page.dart';
 import 'edit_profile_page.dart';
 
-class EditBio extends StatefulWidget {
-  const EditBio({Key? key, required this.user, required this.bio})
-      : super(key: key);
+class EditMobileNo extends StatefulWidget {
+  const EditMobileNo({super.key, required this.user});
   final User user;
-  final String bio;
 
   @override
-  State<EditBio> createState() => _EditBioState();
+  State<EditMobileNo> createState() => _EditMobileNoState();
 }
 
-class _EditBioState extends State<EditBio> {
+class _EditMobileNoState extends State<EditMobileNo> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final newBioController = TextEditingController();
+  final newMobileNoController = TextEditingController();
   final _supabaseClient = UserService();
   User? user;
+  late bool isUnique;
 
-  void updateBio(String newBio, String oldBio) {
-    _supabaseClient.updateBio(newBio, oldBio);
+  void updateMobileNo(String newMobileNo, String oldMobileNo) {
+    _supabaseClient.updateMobileNo(newMobileNo, oldMobileNo);
   }
 
   @override
@@ -48,7 +46,7 @@ class _EditBioState extends State<EditBio> {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: const <Widget>[
-            Text('Bio'),
+            Text('Mobile Number'),
             SizedBox(
               width: 10,
               height: 10,
@@ -60,15 +58,16 @@ class _EditBioState extends State<EditBio> {
           IconButton(
             onPressed: () {
               if (_formKey.currentState!.validate()) {
-                updateBio(newBioController.text, widget.bio);
+                updateMobileNo(
+                    newMobileNoController.text, widget.user.mobileNo);
 
                 user = User(
                     widget.user.id,
                     widget.user.username,
-                    widget.user.mobileNo,
+                    newMobileNoController.text,
                     widget.user.email,
                     widget.user.displayName,
-                    newBioController.text,
+                    widget.user.bio,
                     widget.user.createTime);
 
                 Navigator.pushReplacement(
@@ -88,15 +87,27 @@ class _EditBioState extends State<EditBio> {
       body: Form(
         key: _formKey,
         child: TextFormField(
-            controller: newBioController,
+            controller: newMobileNoController,
             decoration: InputDecoration(
-              hintText: widget.bio,
-              helperText: 'Enter your desired biography',
+              hintText: widget.user.mobileNo,
+              helperText: 'Enter your new mobile number',
               contentPadding: EdgeInsets.all(20),
             ),
+            onChanged: (text) async {
+              var isUniqueAsync = await _supabaseClient.uniqueNumber(text);
+              setState(() {
+                isUnique = isUniqueAsync;
+              });
+            },
             validator: (String? value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter new biography';
+                return 'Please enter new mobile number';
+              } else if (value.length != 8) {
+                return "Please enter a valid number";
+              } else if (value == widget.user.mobileNo) {
+                return 'No change in mobile number';
+              } else if (!isUnique) {
+                return 'Mobile number is taken';
               }
               return null;
             }),
