@@ -35,7 +35,10 @@ class FriendInfoPage extends StatelessWidget {
           onPressed: () => Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => HomePage(user: user),
+              builder: (context) => HomePage(
+                user: user,
+                tabIndex: 1,
+              ),
             ),
           ),
         ),

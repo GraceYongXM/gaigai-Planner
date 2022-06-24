@@ -143,6 +143,22 @@ class RequestService {
     }
   }
 
+  Future<String?> findUsername(String mobileNo) async {
+    var response = await _client
+        .from('users')
+        .select('username')
+        .eq('mobileNo', mobileNo)
+        .execute();
+    if (response.error == null) {
+      final result = response.data as List<dynamic>;
+      log('findUsername success');
+      return result[0]['username'];
+    } else {
+      log('Error in findUsername: ${response.error!.message}');
+      return null;
+    }
+  }
+
   void insertRequest(
       {required String fromID, String? mobileNo, String? username}) async {
     String toID;

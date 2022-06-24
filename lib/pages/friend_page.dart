@@ -147,30 +147,14 @@ class _FriendPageState extends State<FriendPage> {
               bool friendExists;
               String text = _controller.text;
 
-              if (dropdownValue == 'Username') {
-                exists = !(await _userService.uniqueUsername(text));
-              } else {
-                exists = !(await _userService.uniqueNumber(text));
-              }
-              if (!exists) {
+              if (text == widget.user.username ||
+                  text == widget.user.mobileNo) {
+                Navigator.pop(context);
                 showDialog<String>(
                   context: context,
                   builder: (BuildContext context) => AlertDialog(
                     title: const Text('Error'),
-                    content: text == ''
-                        ? Text('Please enter the $dropdownValue')
-                        : SizedBox(
-                            height: 50,
-                            child: Column(
-                              children: [
-                                const Text('Cannot find user with'),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Text('$dropdownValue: $text'),
-                              ],
-                            ),
-                          ),
+                    content: const Text('You cannot add yourself as friend.'),
                     actions: <Widget>[
                       TextButton(
                         onPressed: () {
@@ -182,18 +166,30 @@ class _FriendPageState extends State<FriendPage> {
                   ),
                 );
               } else {
-                friendExists = dropdownValue == 'Username'
-                    ? await _requestService.friendExists(
-                        friendIDs: friendIDs, username: text)
-                    : await _requestService.friendExists(
-                        friendIDs: friendIDs, mobileNo: text);
-                if (friendExists) {
-                  Navigator.pop(context);
+                if (dropdownValue == 'Username') {
+                  exists = !(await _userService.uniqueUsername(text));
+                } else {
+                  exists = !(await _userService.uniqueNumber(text));
+                }
+                if (!exists) {
                   showDialog<String>(
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
                       title: const Text('Error'),
-                      content: const Text('You are already friends.'),
+                      content: text == ''
+                          ? Text('Please enter the $dropdownValue')
+                          : SizedBox(
+                              height: 50,
+                              child: Column(
+                                children: [
+                                  const Text('Cannot find user with'),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text('$dropdownValue: $text'),
+                                ],
+                              ),
+                            ),
                       actions: <Widget>[
                         TextButton(
                           onPressed: () {
@@ -205,35 +201,18 @@ class _FriendPageState extends State<FriendPage> {
                     ),
                   );
                 } else {
-                  requestExists = dropdownValue == 'Username'
-                      ? await _requestService.requestExists(
-                          fromID: widget.user.id, username: text)
-                      : await _requestService.requestExists(
-                          fromID: widget.user.id, mobileNo: text);
-                  if (requestExists == null) {
+                  friendExists = dropdownValue == 'Username'
+                      ? await _requestService.friendExists(
+                          friendIDs: friendIDs, username: text)
+                      : await _requestService.friendExists(
+                          friendIDs: friendIDs, mobileNo: text);
+                  if (friendExists) {
                     Navigator.pop(context);
                     showDialog<String>(
                       context: context,
                       builder: (BuildContext context) => AlertDialog(
                         title: const Text('Error'),
-                        content: const Text('You already have the request.'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text('OK'),
-                          ),
-                        ],
-                      ),
-                    );
-                  } else if (requestExists == false) {
-                    Navigator.pop(context);
-                    showDialog<String>(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                        title: const Text('Error'),
-                        content: const Text('Request is pending.'),
+                        content: const Text('You are already friends.'),
                         actions: <Widget>[
                           TextButton(
                             onPressed: () {
@@ -245,29 +224,76 @@ class _FriendPageState extends State<FriendPage> {
                       ),
                     );
                   } else {
-                    dropdownValue == 'Username'
-                        ? _requestService.insertRequest(
+                    requestExists = dropdownValue == 'Username'
+                        ? await _requestService.requestExists(
                             fromID: widget.user.id, username: text)
-                        : _requestService.insertRequest(
+                        : await _requestService.requestExists(
                             fromID: widget.user.id, mobileNo: text);
-                    Navigator.pop(context);
-                    showDialog<String>(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                        title: Text(friendExists ? 'Error' : 'Success'),
-                        content: Text(friendExists
-                            ? 'You are already friends.'
-                            : 'Friend request has been sent!'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text('OK'),
-                          ),
-                        ],
-                      ),
-                    );
+                    if (requestExists == null) {
+                      String username = '';
+                      Navigator.pop(context);
+                      if (dropdownValue != 'Username') {
+                        username =
+                            await _requestService.findUsername(text) as String;
+                      }
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: const Text('Error'),
+                          content:
+                              Text('$username has sent you a friend request.'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else if (requestExists == false) {
+                      Navigator.pop(context);
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: const Text('Error'),
+                          content: const Text('Request is pending.'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else {
+                      dropdownValue == 'Username'
+                          ? _requestService.insertRequest(
+                              fromID: widget.user.id, username: text)
+                          : _requestService.insertRequest(
+                              fromID: widget.user.id, mobileNo: text);
+                      Navigator.pop(context);
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: Text(friendExists ? 'Error' : 'Success'),
+                          content: Text(friendExists
+                              ? 'You are already friends.'
+                              : 'Friend request has been sent!'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
                   }
                 }
               }

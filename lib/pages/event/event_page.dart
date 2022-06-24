@@ -68,19 +68,31 @@ class _EventPageState extends State<EventPage> {
                     ],
                   ),
                 )
-              : Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: ListView.builder(
-                    itemCount: eventIDs.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return EventTile(
-                        user: widget.user,
-                        index: index,
-                        eventInfo: events,
-                      );
-                    },
+              : ListView.separated(
+                  shrinkWrap: true,
+                  physics: AlwaysScrollableScrollPhysics(),
+                  itemCount: events.length,
+                  itemBuilder: (context, index) => ListTile(
+                    title: Text(events[index].name),
+                    subtitle: Text(events[index].description ?? ''),
+                    onTap: () {},
+                  ),
+                  separatorBuilder: (context, index) => const Divider(
+                    thickness: 1,
                   ),
                 ),
+      /*: ListView.builder(
+                  physics: AlwaysScrollableScrollPhysics(),
+                  itemCount: eventIDs.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    print(eventIDs.length);
+                    return EventTile(
+                      user: widget.user,
+                      index: index,
+                      eventInfo: events,
+                    );
+                  },
+                ),*/
       floatingActionButton: FloatingActionButton(
         onPressed: () => {
           Navigator.push(

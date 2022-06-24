@@ -9,8 +9,10 @@ import '../models/user.dart';
 import 'signin_signup/login_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key, required this.user}) : super(key: key);
+  const HomePage({Key? key, required this.user, this.tabIndex})
+      : super(key: key);
   final User user;
+  final int? tabIndex;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -35,7 +37,10 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, initialIndex: 0, vsync: this);
+    _tabController = TabController(
+        length: 3,
+        initialIndex: (widget.tabIndex == null ? 0 : widget.tabIndex!),
+        vsync: this);
   }
 
   @override
