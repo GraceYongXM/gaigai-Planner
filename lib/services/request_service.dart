@@ -72,6 +72,32 @@ class RequestService {
         : 'Error in updateRequest: ${response.error!.message}');
   }
 
+  void updateInvitation(
+      {required String eventID,
+      required String userID,
+      required bool accepted}) async {
+    String status = 'rejected';
+    if (accepted) {
+      status = 'accepted';
+      final insert1 = await _client.from('events_users').insert({
+        'event_id': eventID,
+        'user_id': userID,
+      }).execute();
+      log(insert1.error == null
+          ? 'insert1 success'
+          : 'Error in insert1: ${insert1.error!.message}');
+    }
+    final response = await _client
+        .from('event_invitations')
+        .update({'status': status})
+        .eq('user_id', userID)
+        .eq('event_id', eventID)
+        .execute();
+    log(response.error == null
+        ? 'updateInvitation success'
+        : 'Error in updateInvitation: ${response.error!.message}');
+  }
+
   Future<bool?> requestExists(
       {required String fromID, String? mobileNo, String? username}) async {
     String toID;
@@ -114,6 +140,22 @@ class RequestService {
       return false;
     } else {
       return true;
+    }
+  }
+
+  Future<String?> findUsername(String mobileNo) async {
+    var response = await _client
+        .from('users')
+        .select('username')
+        .eq('mobileNo', mobileNo)
+        .execute();
+    if (response.error == null) {
+      final result = response.data as List<dynamic>;
+      log('findUsername success');
+      return result[0]['username'];
+    } else {
+      log('Error in findUsername: ${response.error!.message}');
+      return null;
     }
   }
 
@@ -189,17 +231,19 @@ class RequestService {
   }
 
   Future<List<model.User>> getRequesterInfo(List<String> requestIDs) async {
-    final response =
-        await _client.from('users').select().in_('id', requestIDs).execute();
-    if (response.error == null) {
-      final results = response.data as List<dynamic>;
-      List<model.User> requesterInfo =
-          results.map((e) => _supabaseClient.toUser(e)).toList();
-      if (requesterInfo.isNotEmpty) {
-        return requesterInfo;
+    List<model.User> requesterInfo = [];
+    for (String id in requestIDs) {
+      final response =
+          await _client.from('users').select().eq('id', id).execute();
+      if (response.error == null) {
+        final user = response.data as List<dynamic>;
+        requesterInfo.add(_supabaseClient.toUser(user[0]));
+      } else {
+        log('Error in getRequesterInfo: ${response.error!.message}');
       }
-    } else {
-      log('Error in getRequesterInfo: ${response.error!.message}');
+    }
+    if (requesterInfo.isNotEmpty) {
+      return requesterInfo;
     }
     return [];
   }
@@ -245,19 +289,63 @@ class RequestService {
   }
 
   Future<List<EventDetails>> getEventInfo(List<String> invitationIDs) async {
+    List<EventDetails> eventInfo = [];
+    for (String id in invitationIDs) {
+      final response = await _client
+          .from('events_details')
+          .select()
+          .eq('event_id', id)
+          .execute();
+      if (response.error == null) {
+        final event = response.data as List<dynamic>;
+        eventInfo.add(toEvent(event[0]));
+      } else {
+        log('Error in getEventInfo: ${response.error!.message}');
+      }
+    }
+    if (eventInfo.isNotEmpty) {
+      return eventInfo;
+    }
+    return [];
+  }
+
+  Future<List<String>> getOwnerIDs(String id) async {
     final response = await _client
-        .from('events_details')
-        .select()
-        .in_('event_id', invitationIDs)
+        .from('event_invitations')
+        .select('requester_id')
+        .eq('user_id', id)
+        .eq('status', 'pending')
         .execute();
     if (response.error == null) {
       final results = response.data as List<dynamic>;
-      List<EventDetails> eventInfo = results.map((e) => toEvent(e)).toList();
-      if (eventInfo.isNotEmpty) {
-        return eventInfo;
+      List<String> requesterIDs =
+          results.map((e) => e['requester_id'] as String).toList();
+      if (requesterIDs.isNotEmpty) {
+        return requesterIDs;
       }
     } else {
-      log('Error in getEventInfo: ${response.error!.message}');
+      log('Error in getOwnerIDs: ${response.error!.message}');
+    }
+    return [];
+  }
+
+  Future<List<String>> getOwnerNames(List<String> requesterIDs) async {
+    List<String> ownerNames = [];
+    for (String id in requesterIDs) {
+      final response = await _client
+          .from('users')
+          .select('display_name')
+          .eq('id', id)
+          .execute();
+      if (response.error == null) {
+        final name = response.data as List<dynamic>;
+        ownerNames.add(name[0]['display_name']);
+      } else {
+        log('Error in getOwnerNames: ${response.error!.message}');
+      }
+    }
+    if (ownerNames.isNotEmpty) {
+      return ownerNames;
     }
     return [];
   }
@@ -274,6 +362,7 @@ class RequestService {
 
   EventInvitation toInvitation(Map<String, dynamic> result) {
     return EventInvitation(
+      result['id'],
       result['user_id'],
       result['event_id'],
       result['requester_id'],

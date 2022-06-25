@@ -20,14 +20,21 @@ class _FriendPageState extends State<FriendPage> {
   final _userService = UserService();
   final _requestService = RequestService();
   final _supabaseClient = FriendService();
+
   List<String> friendIDs = [];
   List<Friend> friends = [];
   List<User> friendInfo = [];
+  List<Friend> displayedFriends = [];
+  List<User> displayedFriendInfo = [];
+
+  bool isLoading = false;
 
   final _controller = TextEditingController();
+  final _searchController = TextEditingController();
 
   @override
   void initState() {
+    isLoading = true;
     super.initState();
     getFriends(widget.user.id);
   }
@@ -36,17 +43,24 @@ class _FriendPageState extends State<FriendPage> {
   void dispose() {
     super.dispose();
     _controller.dispose();
+    _searchController.dispose();
   }
 
   void getFriends(String id) async {
     List<String> _friendIDs = await _supabaseClient.getFriendIDs(id);
     List<Friend> _friends = await _supabaseClient.getFriends(id);
     List<User> _friendInfo = await _supabaseClient.getFriendInfo(_friendIDs);
-    setState(() {
-      friendIDs = _friendIDs;
-      friends = _friends;
-      friendInfo = _friendInfo;
-    });
+
+    if (this.mounted) {
+      setState(() {
+        friendIDs = _friendIDs;
+        friends = _friends;
+        friendInfo = _friendInfo;
+        displayedFriends = _friends;
+        displayedFriendInfo = _friendInfo;
+        isLoading = false;
+      });
+    }
   }
 
   String dropdownValue = 'Username';
@@ -133,30 +147,14 @@ class _FriendPageState extends State<FriendPage> {
               bool friendExists;
               String text = _controller.text;
 
-              if (dropdownValue == 'Username') {
-                exists = !(await _userService.uniqueUsername(text));
-              } else {
-                exists = !(await _userService.uniqueNumber(text));
-              }
-              if (!exists) {
+              if (text == widget.user.username ||
+                  text == widget.user.mobileNo) {
+                Navigator.pop(context);
                 showDialog<String>(
                   context: context,
                   builder: (BuildContext context) => AlertDialog(
                     title: const Text('Error'),
-                    content: text == ''
-                        ? Text('Please enter the $dropdownValue')
-                        : SizedBox(
-                            height: 50,
-                            child: Column(
-                              children: [
-                                const Text('Cannot find user with'),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Text('$dropdownValue: $text'),
-                              ],
-                            ),
-                          ),
+                    content: const Text('You cannot add yourself as friend.'),
                     actions: <Widget>[
                       TextButton(
                         onPressed: () {
@@ -168,18 +166,30 @@ class _FriendPageState extends State<FriendPage> {
                   ),
                 );
               } else {
-                friendExists = dropdownValue == 'Username'
-                    ? await _requestService.friendExists(
-                        friendIDs: friendIDs, username: text)
-                    : await _requestService.friendExists(
-                        friendIDs: friendIDs, mobileNo: text);
-                if (friendExists) {
-                  Navigator.pop(context);
+                if (dropdownValue == 'Username') {
+                  exists = !(await _userService.uniqueUsername(text));
+                } else {
+                  exists = !(await _userService.uniqueNumber(text));
+                }
+                if (!exists) {
                   showDialog<String>(
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
                       title: const Text('Error'),
-                      content: const Text('You are already friends.'),
+                      content: text == ''
+                          ? Text('Please enter the $dropdownValue')
+                          : SizedBox(
+                              height: 50,
+                              child: Column(
+                                children: [
+                                  const Text('Cannot find user with'),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text('$dropdownValue: $text'),
+                                ],
+                              ),
+                            ),
                       actions: <Widget>[
                         TextButton(
                           onPressed: () {
@@ -191,35 +201,18 @@ class _FriendPageState extends State<FriendPage> {
                     ),
                   );
                 } else {
-                  requestExists = dropdownValue == 'Username'
-                      ? await _requestService.requestExists(
-                          fromID: widget.user.id, username: text)
-                      : await _requestService.requestExists(
-                          fromID: widget.user.id, mobileNo: text);
-                  if (requestExists == null) {
+                  friendExists = dropdownValue == 'Username'
+                      ? await _requestService.friendExists(
+                          friendIDs: friendIDs, username: text)
+                      : await _requestService.friendExists(
+                          friendIDs: friendIDs, mobileNo: text);
+                  if (friendExists) {
                     Navigator.pop(context);
                     showDialog<String>(
                       context: context,
                       builder: (BuildContext context) => AlertDialog(
                         title: const Text('Error'),
-                        content: const Text('You already have the request.'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text('OK'),
-                          ),
-                        ],
-                      ),
-                    );
-                  } else if (requestExists == false) {
-                    Navigator.pop(context);
-                    showDialog<String>(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                        title: const Text('Error'),
-                        content: const Text('Request is pending.'),
+                        content: const Text('You are already friends.'),
                         actions: <Widget>[
                           TextButton(
                             onPressed: () {
@@ -231,29 +224,76 @@ class _FriendPageState extends State<FriendPage> {
                       ),
                     );
                   } else {
-                    dropdownValue == 'Username'
-                        ? _requestService.insertRequest(
+                    requestExists = dropdownValue == 'Username'
+                        ? await _requestService.requestExists(
                             fromID: widget.user.id, username: text)
-                        : _requestService.insertRequest(
+                        : await _requestService.requestExists(
                             fromID: widget.user.id, mobileNo: text);
-                    Navigator.pop(context);
-                    showDialog<String>(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                        title: Text(friendExists ? 'Error' : 'Success'),
-                        content: Text(friendExists
-                            ? 'You are already friends.'
-                            : 'Friend request has been sent!'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text('OK'),
-                          ),
-                        ],
-                      ),
-                    );
+                    if (requestExists == null) {
+                      String username = '';
+                      Navigator.pop(context);
+                      if (dropdownValue != 'Username') {
+                        username =
+                            await _requestService.findUsername(text) as String;
+                      }
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: const Text('Error'),
+                          content:
+                              Text('$username has sent you a friend request.'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else if (requestExists == false) {
+                      Navigator.pop(context);
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: const Text('Error'),
+                          content: const Text('Request is pending.'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else {
+                      dropdownValue == 'Username'
+                          ? _requestService.insertRequest(
+                              fromID: widget.user.id, username: text)
+                          : _requestService.insertRequest(
+                              fromID: widget.user.id, mobileNo: text);
+                      Navigator.pop(context);
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: Text(friendExists ? 'Error' : 'Success'),
+                          content: Text(friendExists
+                              ? 'You are already friends.'
+                              : 'Friend request has been sent!'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
                   }
                 }
               }
@@ -266,43 +306,98 @@ class _FriendPageState extends State<FriendPage> {
     );
   }
 
+  void searchFriend(String query) {
+    if (query == '') {
+      if (this.mounted) {
+        setState(() {
+          displayedFriends = friends;
+          displayedFriendInfo = friendInfo;
+        });
+      }
+    } else {
+      final suggestions =
+          List.generate(friends.length, (index) => index).where((index) {
+        final displayName = friendInfo[index].displayName.toLowerCase();
+        final input = query.toLowerCase();
+
+        return displayName.contains(input);
+      }).toList();
+
+      List<Friend> newDisplayedFriends = [];
+      List<User> newDisplayedFriendInfo = [];
+
+      for (int i in suggestions) {
+        newDisplayedFriends.add(friends[i]);
+        newDisplayedFriendInfo.add(friendInfo[i]);
+      }
+      if (this.mounted) {
+        setState(() {
+          displayedFriends = newDisplayedFriends;
+          displayedFriendInfo = newDisplayedFriendInfo;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      body: (friendIDs.isEmpty)
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('You have not added any friends.',
-                      style: TextStyle(fontSize: 18)),
-                  TextButton(
-                    onPressed: () async {
-                      await sendRequest();
-                    },
-                    child: const Text(
-                      'Add friend',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  )
-                ],
-              ),
-            )
-          : Padding(
-              padding: const EdgeInsets.all(10),
-              child: ListView.builder(
-                itemCount: friendIDs.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return FriendTile(
-                    user: widget.user,
-                    index: index,
-                    friendInfo: friendInfo,
-                    friends: friends,
-                  );
-                },
-              ),
-            ),
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : (friends.isEmpty)
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('You have not added any friends.',
+                          style: TextStyle(fontSize: 18)),
+                      TextButton(
+                        onPressed: () async {
+                          await sendRequest();
+                        },
+                        child: const Text(
+                          'Add friend',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Column(
+                    children: [
+                      TextField(
+                        autofocus: false,
+                        controller: _searchController,
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.search),
+                          hintText: 'Search friend',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        onChanged: searchFriend,
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          keyboardDismissBehavior:
+                              ScrollViewKeyboardDismissBehavior.onDrag,
+                          itemCount: displayedFriends.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return FriendTile(
+                              user: widget.user,
+                              index: index,
+                              friendInfo: displayedFriendInfo,
+                              friends: displayedFriends,
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await sendRequest();

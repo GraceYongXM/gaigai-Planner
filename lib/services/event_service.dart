@@ -75,6 +75,47 @@ class EventService {
     return [];
   }
 
+  Future<List<String>> getEventIDs(String id) async {
+    //method is used to show events on events tab
+    final response = await _client
+        .from('events_users')
+        .select('event_id')
+        .eq('user_id', id)
+        .execute();
+    if (response.error == null) {
+      final results = response.data as List<dynamic>;
+      List<String> eventIDs =
+          results.map((e) => e['event_id'] as String).toList();
+      if (eventIDs.isNotEmpty) {
+        return eventIDs;
+      }
+    } else {
+      log('Error in getEventIDs: ${response.error!.message}');
+    }
+    return [];
+  }
+
+  Future<List<EventDetails>> getEventInfo(List<String> eventIDs) async {
+    List<EventDetails> events = [];
+    for (String id in eventIDs) {
+      final response = await _client
+          .from('events_details')
+          .select()
+          .eq('event_id', id)
+          .execute();
+      if (response.error == null) {
+        final event = response.data as List<dynamic>;
+        events.add(toEvent(event[0]));
+      } else {
+        log('Error in getEventInfo: ${response.error!.message}');
+      }
+    }
+    if (events.isNotEmpty) {
+      return events;
+    }
+    return [];
+  }
+
   EventDetails toEvent(Map<String, dynamic> result) {
     return EventDetails(
       result['event_id'],

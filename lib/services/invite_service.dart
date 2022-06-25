@@ -110,6 +110,7 @@ class InviteService {
 
   EventInvitation toEventInvitation(Map<String, dynamic> result) {
     return EventInvitation(
+      result['id'],
       result['user_id'],
       result['event_id'],
       result['requester_id'],

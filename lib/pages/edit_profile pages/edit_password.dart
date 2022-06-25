@@ -30,6 +30,16 @@ class _EditPasswordState extends State<EditPassword> {
     }
   }
 
+  void _signOut() async {
+    await Services.of(context).authService.signOut();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const LoginPage(title: 'Login UI'),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,8 +49,8 @@ class _EditPasswordState extends State<EditPassword> {
           onPressed: () => Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const LoginPage(
-                title: 'pls remove title',
+              builder: (context) => ProfilePage(
+                user: widget.user,
               ),
             ),
           ),
@@ -61,14 +71,41 @@ class _EditPasswordState extends State<EditPassword> {
           IconButton(
             onPressed: () {
               if (_formKey.currentState!.validate()) {
-                updatePassword(newPasswordController.text);
-
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const LoginPage(
-                      title: 'wheee',
-                    ),
+                showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    content: const Text('Confirm password change?'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          updatePassword(newPasswordController.text);
+                          showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: const Text('Success'),
+                              content: const Text('Please log in again.'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    _signOut();
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        child: const Text('OK'),
+                      ),
+                    ],
                   ),
                 );
               }
@@ -80,20 +117,21 @@ class _EditPasswordState extends State<EditPassword> {
       body: Form(
         key: _formKey,
         child: TextFormField(
-            controller: newPasswordController,
-            obscureText: true,
-            decoration: InputDecoration(
-              helperText: 'Enter your new password',
-              contentPadding: EdgeInsets.all(20),
-            ),
-            validator: (String? value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter new password';
-              } else if (value.length < 6) {
-                return 'Password should be at least 6 characters';
-              }
-              return null;
-            }),
+          controller: newPasswordController,
+          obscureText: true,
+          decoration: InputDecoration(
+            helperText: 'Enter your new password',
+            contentPadding: EdgeInsets.all(20),
+          ),
+          validator: (String? value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter new password';
+            } else if (value.length < 6) {
+              return 'Password should be at least 6 characters';
+            }
+            return null;
+          },
+        ),
       ),
     );
   }
