@@ -189,20 +189,6 @@ class _CreateEventState extends State<CreateEvent> {
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: TextFormField(
-                  controller: locationController,
-                  decoration: InputDecoration(
-                    hintText: 'Your location',
-                    labelText: 'Your location',
-                    prefixIcon: const Icon(Icons.location_on_outlined),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-              ),
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
