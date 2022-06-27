@@ -16,10 +16,13 @@ Criteria
 To try gaigaiPlanner, do follow the instructions below.
 
 ### Using an Emulator
-1. Download and install [Flutter]([url](https://docs.flutter.dev/get-started/install)) 
-2. Download and install chosen emulator (ie, [Android Studio]([url](https://developer.android.com/studio)))
-3. Download and install [SQLite]([url](https://www.sqlite.org/download.html)). For windows, choose the file name "sqlite-tools-win32-x86-3380500.zip"
-4. Clone or download this repository
-5. In the terminal, use `flutter pub get` to obtain necessary dependencies
-6. Set up an emulator and ensure it is running
-7. Open this repository folder in chosen text editor and run the `main.dart` file. The application should appear on the emulator
+1. Download and install Flutter & chosen emulator. 
+2. Clone or download this repository.
+3. In the terminal, use flutter pub get to get the necessary dependencies
+4. Set up an emulator and ensure it is running
+5. Open this repository folder in a text editor, and run the main.dart file. The application should appear on the emulator.
+
+Alternatively, 
+1. Download the .apk file under releases v2.0.0.
+2. Open your emulator.
+3. Drag and drop the downloaded file onto the emulator. The application should appear on the emulator.
