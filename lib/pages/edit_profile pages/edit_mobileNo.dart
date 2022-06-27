@@ -75,6 +75,7 @@ class _EditMobileNoState extends State<EditMobileNo> {
                   MaterialPageRoute(
                     builder: (context) => ProfilePage(
                       user: user!,
+                      tabIndex: 0,
                     ),
                   ),
                 );

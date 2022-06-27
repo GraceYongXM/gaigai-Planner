@@ -78,6 +78,7 @@ class _EditUsernameState extends State<EditUsername> {
                   MaterialPageRoute(
                     builder: (context) => ProfilePage(
                       user: user!,
+                      tabIndex: 0,
                     ),
                   ),
                 );

@@ -76,6 +76,7 @@ class _EditBioState extends State<EditBio> {
                   MaterialPageRoute(
                     builder: (context) => ProfilePage(
                       user: user!,
+                      tabIndex: 0,
                     ),
                   ),
                 );

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 import '../../models/user.dart';
 import '../../services/services.dart';
-import '../profile_page.dart';
 import '../signin_signup/login_page.dart';
+import '../edit_profile pages/edit_profile_page.dart';
 
 class EditPassword extends StatefulWidget {
   const EditPassword({Key? key, required this.user}) : super(key: key);
@@ -49,8 +49,10 @@ class _EditPasswordState extends State<EditPassword> {
           onPressed: () => Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => ProfilePage(
+              builder: (context) => EditProfilePage(
                 user: widget.user,
+                displayName: widget.user.displayName,
+                bio: widget.user.bio,
               ),
             ),
           ),

@@ -230,7 +230,7 @@ class _FriendPageState extends State<FriendPage> {
                         : await _requestService.requestExists(
                             fromID: widget.user.id, mobileNo: text);
                     if (requestExists == null) {
-                      String username = '';
+                      String username = text;
                       Navigator.pop(context);
                       if (dropdownValue != 'Username') {
                         username =

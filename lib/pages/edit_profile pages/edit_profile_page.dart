@@ -36,6 +36,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             MaterialPageRoute(
               builder: (context) => ProfilePage(
                 user: widget.user,
+                tabIndex: 0,
               ),
             ),
           ),

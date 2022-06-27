@@ -76,6 +76,7 @@ class _EditDisplayNameState extends State<EditDisplayName> {
                   MaterialPageRoute(
                     builder: (context) => ProfilePage(
                       user: user!,
+                      tabIndex: 0,
                     ),
                   ),
                 );

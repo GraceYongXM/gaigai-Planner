@@ -6,8 +6,10 @@ import 'edit_profile pages/edit_password.dart';
 import 'edit_profile pages/edit_profile_page.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key, required this.user}) : super(key: key);
+  const ProfilePage({Key? key, required this.user, required this.tabIndex})
+      : super(key: key);
   final User user;
+  final int tabIndex;
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -25,7 +27,6 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   @override
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -39,7 +40,8 @@ class _ProfilePageState extends State<ProfilePage> {
           onPressed: () => Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => HomePage(user: widget.user),
+              builder: (context) =>
+                  HomePage(user: widget.user, tabIndex: widget.tabIndex),
             ),
           ),
         ),
