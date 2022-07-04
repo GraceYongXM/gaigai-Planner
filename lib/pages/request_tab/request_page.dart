@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:gaigai_planner/pages/event/event_info_page.dart';
-import 'package:gaigai_planner/pages/requested_friend_info_page.dart';
+import 'package:gaigai_planner/pages/request_tab/requested_friend_info_page.dart';
 
-import '../services/request_service.dart';
-import '../models/user.dart';
-import '../models/friend_request.dart';
-import '../models/event_invitation.dart';
-import '../models/event_details.dart';
+import 'event_info_page.dart';
+import '../../services/request_service.dart';
+import '../../models/user.dart';
+import '../../models/friend_request.dart';
+import '../../models/event_invitation.dart';
+import '../../models/event_details.dart';
 
 class RequestPage extends StatefulWidget {
   const RequestPage({Key? key, required this.user}) : super(key: key);

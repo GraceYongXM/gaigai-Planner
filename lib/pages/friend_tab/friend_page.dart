@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:gaigai_planner/pages/friend_info_page.dart';
+import 'package:gaigai_planner/pages/friend_tab/friend_info_page.dart';
 import 'package:gaigai_planner/services/friend_service.dart';
 import 'package:gaigai_planner/services/request_service.dart';
-import '../services/user_service.dart';
-import '../models/user.dart';
-import '../models/friend.dart';
+import '../../services/user_service.dart';
+import '../../models/user.dart';
+import '../../models/friend.dart';
 
 class FriendPage extends StatefulWidget {
   const FriendPage({Key? key, required this.user}) : super(key: key);

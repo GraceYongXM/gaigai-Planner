@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../models/user.dart';
-import '../services/friend_service.dart';
-import 'home_page.dart';
+import '../../models/user.dart';
+import '../../services/friend_service.dart';
+import '../home_page.dart';
 
 class FriendInfoPage extends StatelessWidget {
   FriendInfoPage(
