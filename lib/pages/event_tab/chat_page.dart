@@ -7,8 +7,12 @@ import 'package:gaigai_planner/services/chat_service.dart';
 import 'package:gaigai_planner/models/message.dart';
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({Key? key, required this.eventDetails, required this.user})
-      : super(key: key);
+  const ChatPage({
+    Key? key,
+    required this.eventDetails,
+    required this.user,
+  }) : super(key: key);
+
   final EventDetails eventDetails;
   final User user;
 
@@ -38,38 +42,58 @@ class _ChatPageState extends State<ChatPage> {
     _controller.dispose;
   }
 
+  String? getName(String id, List<Map<String, String>> members) {
+    for (Map<String, String> map in members) {
+      if (map['id'] == id) {
+        return map['display_name'];
+      }
+    }
+    return null;
+  }
+
   void getMessages() async {
     List<Message> _messages =
         await _supabaseClient.getMessages(widget.eventDetails.eventID);
+    List<Map<String, String>> members =
+        await _supabaseClient.getMembers(widget.eventDetails.eventID);
 
     String? date = null;
     List<Widget> _messageWidgets = [];
+    String? name = null;
     int index = 0;
 
     for (Message message in _messages) {
       String tempDate = DateFormat('yMMMd')
           .format(message.createTime.add(const Duration(hours: 8)));
       String tempTime = DateFormat.jm().format(message.createTime);
+      String tempName = getName(message.userID, members)!;
 
       if (date == null || date != tempDate) {
         _messageWidgets.add(DateTile(date: tempDate));
         date = tempDate;
       }
-      if (index != _messages.length - 1 &&
-          tempTime == DateFormat.jm().format(_messages[index + 1].createTime)) {
-        if (message.userID == widget.user.id) {
-          _messageWidgets.add(OwnMessageTileNoTime(message: message.content));
-        } else {
-          _messageWidgets.add(MessageTileNoTime(message: message.content));
-        }
+
+      if (message.userID == widget.user.id) {
+        _messageWidgets.add(OwnMessageTile(message: message.content));
+        name = tempName;
       } else {
-        if (message.userID == widget.user.id) {
-          _messageWidgets.add(OwnMessageTile(
-              message: message.content, datetime: message.createTime));
+        if (name == null || name != tempName) {
+          _messageWidgets.add(
+              MessageTileWithName(message: message.content, name: tempName));
+          name = tempName;
         } else {
-          _messageWidgets.add(MessageTile(
-              message: message.content, datetime: message.createTime));
+          _messageWidgets.add(MessageTile(message: message.content));
         }
+      }
+      if (index != _messages.length - 1 &&
+          tempTime != DateFormat.jm().format(_messages[index + 1].createTime)) {
+        _messageWidgets.add(TimeTile(
+            datetime: message.createTime,
+            right: message.userID == widget.user.id));
+      } else if (index == _messages.length - 1) {
+        _messageWidgets.add(TimeTile(
+            datetime: message.createTime,
+            right: message.userID == widget.user.id));
       }
       index++;
     }
@@ -142,8 +166,10 @@ class _ChatPageState extends State<ChatPage> {
 
                             setState(() {
                               messageWidgets.add(OwnMessageTile(
-                                  message: _controller.text.trim(),
-                                  datetime: now));
+                                message: _controller.text.trim(),
+                              ));
+                              messageWidgets
+                                  .add(TimeTile(datetime: now, right: true));
                               messages.add(Message(
                                   'random',
                                   widget.user.id,
@@ -168,62 +194,46 @@ class _ChatPageState extends State<ChatPage> {
   }
 }
 
+class TimeTile extends StatelessWidget {
+  DateTime datetime;
+  bool right;
+
+  TimeTile({Key? key, required this.datetime, required this.right})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child: Column(
+        crossAxisAlignment:
+            right ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: [
+          Text(
+            DateFormat.jm().format(datetime.add(const Duration(hours: 8))),
+            style: TextStyle(
+                fontSize: 10,
+                color: Colors.grey.shade500,
+                fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class OwnMessageTile extends StatelessWidget {
   String message;
-  DateTime datetime;
 
   OwnMessageTile({
     Key? key,
     required this.message,
-    required this.datetime,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-              decoration: BoxDecoration(
-                color: Colors.blueAccent.shade100,
-                borderRadius: BorderRadius.circular(25),
-              ),
-              child: Text(message, style: TextStyle(fontSize: 15)),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 8.0),
-              child: Text(
-                DateFormat.jm().format(datetime.add(const Duration(hours: 8))),
-                style: TextStyle(
-                    fontSize: 10,
-                    color: Colors.grey.shade500,
-                    fontWeight: FontWeight.bold),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class OwnMessageTileNoTime extends StatelessWidget {
-  String message;
-
-  OwnMessageTileNoTime({
-    Key? key,
-    required this.message,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       child: Align(
         alignment: Alignment.centerRight,
         child: Column(
@@ -246,12 +256,10 @@ class OwnMessageTileNoTime extends StatelessWidget {
 
 class MessageTile extends StatelessWidget {
   String message;
-  DateTime datetime;
 
   MessageTile({
     Key? key,
     required this.message,
-    required this.datetime,
   }) : super(key: key);
 
   @override
@@ -274,16 +282,6 @@ class MessageTile extends StatelessWidget {
                 style: TextStyle(fontSize: 15),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(top: 8.0),
-              child: Text(
-                DateFormat.jm().format(datetime.add(const Duration(hours: 8))),
-                style: TextStyle(
-                    fontSize: 10,
-                    color: Colors.grey.shade500,
-                    fontWeight: FontWeight.bold),
-              ),
-            )
           ],
         ),
       ),
@@ -291,18 +289,20 @@ class MessageTile extends StatelessWidget {
   }
 }
 
-class MessageTileNoTime extends StatelessWidget {
+class MessageTileWithName extends StatelessWidget {
   String message;
+  String name;
 
-  MessageTileNoTime({
+  MessageTileWithName({
     Key? key,
     required this.message,
+    required this.name,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
       child: Align(
         alignment: Alignment.centerLeft,
         child: Column(
@@ -312,11 +312,16 @@ class MessageTileNoTime extends StatelessWidget {
               padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
               decoration: BoxDecoration(
                 color: Colors.deepPurple.shade100,
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(20),
               ),
-              child: Text(
-                message,
-                style: TextStyle(fontSize: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(name,
+                      style:
+                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                  Text(message, style: TextStyle(fontSize: 15)),
+                ],
               ),
             ),
           ],

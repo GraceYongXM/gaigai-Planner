@@ -8,7 +8,7 @@ class ChatService {
   final _client = SupabaseClient('https://xvjretabvavhxqyaftsr.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2anJldGFidmF2aHhxeWFmdHNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTQ1OTEzMzYsImV4cCI6MTk3MDE2NzMzNn0.3Iuz9BYCPWVDbELfJa2b_jzU9OVzW95St099K2RS_YU');
 
-  Future<List<String>> getMembers(String eventID) async {
+  Future<List<Map<String, String>>> getMembers(String eventID) async {
     final response = await _client
         .from('events_users')
         .select('user_id')
@@ -18,22 +18,21 @@ class ChatService {
       final results = response.data as List<dynamic>;
       List<String> userIDs =
           results.map((e) => e['user_id'] as String).toList();
-      final response2 = await _client
-          .from('users')
-          .select('display_name')
-          .in_('id', userIDs)
-          .execute();
-      if (response2.error == null) {
-        final results2 = response2.data as List<dynamic>;
-        List<String> members =
-            results2.map((e) => e['display_name'] as String).toList();
-        return members;
-      } else {
-        log('${response2.error}');
-        return [];
+      List<Map<String, String>> members = [];
+      for (String id in userIDs) {
+        final response2 = await _client
+            .from('users')
+            .select('display_name')
+            .eq('id', id)
+            .execute();
+        String name = (response2.data as List<dynamic>)[0]['display_name'];
+        members.add({'id': id, 'display_name': name});
       }
+      return members;
+    } else {
+      log('${response.error}');
+      return [];
     }
-    return [];
   }
 
   void insertMessage(

@@ -37,12 +37,16 @@ class _IndivPageState extends State<IndivPage>
   void getData() async {
     String name =
         (await _supabaseClient.getOwner(widget.eventDetails.ownerID))!;
-    List<String> memberNames =
+    List<Map<String, String>> memberNames =
         await _supabaseClient.getMembers(widget.eventDetails.eventID);
+    List<String> names = [];
+    for (Map<String, String> map in memberNames) {
+      names.add(map['display_name']!);
+    }
     if (this.mounted) {
       setState(() {
         ownerName = name;
-        members = memberNames;
+        members = names;
       });
     }
   }

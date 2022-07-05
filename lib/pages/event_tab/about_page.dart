@@ -33,7 +33,6 @@ class _AboutPageState extends State<AboutPage> {
 
   void getData() {
     for (String name in widget.members) {
-      print(name);
       names += widget.user.displayName == name ? 'You' : name;
       names += ', ';
     }
