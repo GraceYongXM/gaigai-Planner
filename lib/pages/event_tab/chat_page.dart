@@ -181,6 +181,8 @@ class _ChatPageState extends State<ChatPage> {
                           setState(() {
                             _controller.text = '';
                           });
+                          _scrollController.jumpTo(
+                              _scrollController.position.maxScrollExtent);
                         },
                         icon: Icon(Icons.send),
                         color: Color(0xffBB86FC),
