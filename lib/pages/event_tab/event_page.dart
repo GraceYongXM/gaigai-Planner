@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gaigai_planner/models/event_details.dart';
-import 'package:gaigai_planner/pages/event/create_event.dart';
+import 'package:gaigai_planner/pages/event_tab/create_event.dart';
+import 'indiv_page.dart';
 import '../../services/event_service.dart';
 import '../../models/user.dart';
 
@@ -75,7 +76,17 @@ class _EventPageState extends State<EventPage> {
                   itemBuilder: (context, index) => ListTile(
                     title: Text(events[index].name),
                     subtitle: Text(events[index].description ?? ''),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => IndivPage(
+                            user: widget.user,
+                            eventDetails: events[index],
+                          ),
+                        ),
+                      );
+                    },
                   ),
                   separatorBuilder: (context, index) => const Divider(
                     thickness: 1,

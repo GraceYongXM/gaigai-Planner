@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:gaigai_planner/pages/profile_page.dart';
 import '../services/services.dart';
-import 'event/event_page.dart';
-import './friend_page.dart';
-import './request_page.dart';
+import 'event_tab/event_page.dart';
+import 'friend_tab/friend_page.dart';
+import 'request_tab/request_page.dart';
 import '../models/user.dart';
 import 'signin_signup/login_page.dart';
 

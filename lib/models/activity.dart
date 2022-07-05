@@ -1,5 +1,3 @@
-import 'dart:core';
-
 class Activity {
   String activityID, name, location, description;
   double cost;

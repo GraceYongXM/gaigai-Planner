@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:gaigai_planner/models/event_details.dart';
-import 'package:gaigai_planner/pages/event/send_event_invites/send_event_invite.dart';
+import 'package:gaigai_planner/pages/event_tab/send_event_invites/send_event_invite.dart';
 import 'package:gaigai_planner/services/event_service.dart';
 import 'package:intl/intl.dart';
 
