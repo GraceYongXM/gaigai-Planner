@@ -8,6 +8,20 @@ class EventService {
   final _client = SupabaseClient('https://xvjretabvavhxqyaftsr.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2anJldGFidmF2aHhxeWFmdHNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTQ1OTEzMzYsImV4cCI6MTk3MDE2NzMzNn0.3Iuz9BYCPWVDbELfJa2b_jzU9OVzW95St099K2RS_YU');
 
+  Future<bool> uniqueEventName(String name, String userID) async {
+    final response = await _client
+        .from('events_details')
+        .select()
+        .match({'name': name, 'owner_id': userID}).execute();
+    if (response.error == null && response.data != null) {
+      final results = response.data as List<dynamic>;
+      return results.isEmpty;
+    } else {
+      log('Error uniqueEventName: ${response.error!.message}');
+      return false;
+    }
+  }
+
   Future<String> createEvent(String name, String ownerID, String? description,
       DateTime startDate, DateTime endDate) async {
     var response = await _client.from('events_details').insert({

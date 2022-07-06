@@ -52,7 +52,7 @@ class _EventPageState extends State<EventPage> {
                           style: TextStyle(fontSize: 18)),
                       TextButton(
                         onPressed: () {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (context) => CreateEvent(
@@ -106,7 +106,7 @@ class _EventPageState extends State<EventPage> {
                 ),*/
       floatingActionButton: FloatingActionButton(
         onPressed: () => {
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => CreateEvent(
