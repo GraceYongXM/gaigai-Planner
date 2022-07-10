@@ -10,18 +10,46 @@ class InviteService {
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2anJldGFidmF2aHhxeWFmdHNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTQ1OTEzMzYsImV4cCI6MTk3MDE2NzMzNn0.3Iuz9BYCPWVDbELfJa2b_jzU9OVzW95St099K2RS_YU');
   final _userService = UserService();
 
-  void sendEventInvite(
-      String userID, String eventID, String requesterID, String status) async {
-    var response = await _client.from('event_invitations').insert({
-      'user_id': userID,
-      'event_id': eventID,
-      'requester_id': requesterID,
-      'status': status,
-    }).execute();
+  Future<String?> getDisplayName(String id) async {
+    var response = await _client
+        .from('users')
+        .select('display_name')
+        .eq('id', id)
+        .execute();
     if (response.error == null) {
-      log('success in sendEventInvite');
-    } else {
-      log('Error in sendEventInvite: ${response.error!.message}');
+      final results = response.data as List<dynamic>;
+      if (results.isNotEmpty) {
+        return results[0]['display_name'];
+      }
+    }
+    return null;
+  }
+
+  Future<String?> getID(String value, bool isUsername) async {
+    String column = 'username';
+    if (!isUsername) {
+      column = 'mobileNo';
+    }
+    var response =
+        await _client.from('users').select('id').eq(column, value).execute();
+    if (response.error == null) {
+      final results = response.data as List<dynamic>;
+      if (results.isNotEmpty) {
+        return results[0]['id'];
+      }
+    }
+    return null;
+  }
+
+  void sendEventInvite(String requesterID, String eventID,
+      List<Map<String, String>> userIDs) async {
+    for (Map<String, String> map in userIDs) {
+      await _client.from('event_invitations').insert({
+        'user_id': map['id'],
+        'event_id': eventID,
+        'requester_id': requesterID,
+        'status': 'pending',
+      }).execute();
     }
   }
 
