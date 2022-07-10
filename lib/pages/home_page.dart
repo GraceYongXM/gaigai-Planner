@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:gaigai_planner/pages/profile_page.dart';
 import '../services/services.dart';
+import 'event_tab/availability form/datepicker_form.dart';
 import 'event_tab/event_page.dart';
 import 'friend_tab/friend_page.dart';
 import 'request_tab/request_page.dart';
@@ -106,6 +107,8 @@ class _HomePageState extends State<HomePage>
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
+          //TestPage(),
+          //EventForm(),
           EventPage(user: widget.user),
           FriendPage(user: widget.user),
           RequestPage(user: widget.user),
