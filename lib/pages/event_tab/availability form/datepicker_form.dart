@@ -32,6 +32,14 @@ class _DatePickerFormState extends State<DatePickerForm> {
         widget.details.eventID, widget.user.id, location);
   }
 
+  void insertActivities() async {
+    bool everyoneSubmitted =
+        await datePickerClient.everyoneSubmitted(widget.details.eventID);
+    if (everyoneSubmitted) {
+      datePickerClient.insertActivities(widget.details.eventID);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,6 +74,7 @@ class _DatePickerFormState extends State<DatePickerForm> {
                 TextButton(
                   onPressed: () {
                     insertLocation(_locationController.text);
+                    insertActivities();
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
