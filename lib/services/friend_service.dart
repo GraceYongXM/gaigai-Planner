@@ -67,19 +67,20 @@ class FriendService {
   }
 
   Future<List<model.User>> getFriendInfo(List<String> friendIDs) async {
-    final response =
-        await _client.from('users').select().in_('id', friendIDs).execute();
-    if (response.error == null) {
-      final results = response.data as List<dynamic>;
-      List<model.User> friendsInfo =
-          results.map((e) => _supabaseClient.toUser(e)).toList();
-      if (friendsInfo.isNotEmpty) {
-        return friendsInfo;
+    List<model.User> friendsInfo = [];
+    for (String id in friendIDs) {
+      final response =
+          await _client.from('users').select().eq('id', id).execute();
+      if (response.error == null) {
+        final results = response.data as List<dynamic>;
+        friendsInfo.add(_supabaseClient.toUser(results[0]));
       }
-    } else {
-      log('Error in getFriendsInfo: ${response.error!.message}');
     }
-    return [];
+    if (friendsInfo.isNotEmpty) {
+      return friendsInfo;
+    } else {
+      return [];
+    }
   }
 
   Friend toFriend(Map<String, dynamic> result) {

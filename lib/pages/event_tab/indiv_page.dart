@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:gaigai_planner/pages/event_tab/activities/activity_page.dart';
 import 'package:gaigai_planner/pages/event_tab/availability%20form/date_page.dart';
 import 'package:gaigai_planner/pages/event_tab/availability%20form/datepicker_form.dart';
+import 'package:gaigai_planner/pages/event_tab/send_event_invites/chat_settings/event_invitations_page.dart';
 
 import 'about_page.dart';
 import 'chat_page.dart';
@@ -24,7 +26,12 @@ class IndivPage extends StatefulWidget {
 
 class _IndivPageState extends State<IndivPage>
     with SingleTickerProviderStateMixin {
-  List<String> options = ['Edit form', 'Share event', 'Delete event'];
+  List<String> options = [
+    'Edit form',
+    'View requests',
+    'Share event',
+    'Delete event'
+  ];
   final _supabaseClient = ChatService();
   String ownerName = '';
   List<String> members = [];
@@ -125,6 +132,15 @@ class _IndivPageState extends State<IndivPage>
                     ),
                   ),
                 );
+              } else if (choice == 'View requests') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EventInvitationsPage(
+                      event: widget.eventDetails,
+                    ),
+                  ),
+                );
               } else if (choice == 'Share event') {
                 showDialog<String>(
                   context: context,
@@ -137,8 +153,8 @@ class _IndivPageState extends State<IndivPage>
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
+                          const Padding(
+                            padding: EdgeInsets.all(8.0),
                             child: Text(
                               'Input this invitation code',
                             ),
