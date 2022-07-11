@@ -1,6 +1,6 @@
 class Activity {
   String activityID, name, location, description;
-  double cost;
+  num cost;
 
   Activity(
     this.activityID,
