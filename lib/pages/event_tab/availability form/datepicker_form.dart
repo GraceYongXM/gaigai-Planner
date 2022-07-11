@@ -35,8 +35,9 @@ class _DatePickerFormState extends State<DatePickerForm> {
   void insertActivities() async {
     bool everyoneSubmitted =
         await datePickerClient.everyoneSubmitted(widget.details.eventID);
-    print(everyoneSubmitted);
-    datePickerClient.insertActivities(widget.details.eventID);
+    if (everyoneSubmitted) {
+      datePickerClient.insertActivities(widget.details.eventID);
+    }
   }
 
   @override

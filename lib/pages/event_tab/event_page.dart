@@ -247,9 +247,7 @@ class _EventPageState extends State<EventPage> {
                       const Text('You have not created any events.',
                           style: TextStyle(fontSize: 18)),
                       TextButton(
-                        onPressed: () {
-                          newEvent;
-                        },
+                        onPressed: newEvent,
                         child: const Text(
                           'Create new event/Join event',
                           style: TextStyle(fontSize: 18),
