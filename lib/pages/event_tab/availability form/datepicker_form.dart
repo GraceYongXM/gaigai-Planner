@@ -40,12 +40,17 @@ class _DatePickerFormState extends State<DatePickerForm> {
         showActionButtons: true,
         controller: _controller,
         onSubmit: (val) {
-          var dateList = val.toString().split(',');
+          var dateListString = val.toString();
+          var dateList = dateListString
+              .substring(1, dateListString.length - 1)
+              .split(', ');
           String date = '';
           for (var i in dateList) {
-            date = i.split(' ')[0].substring(1);
+            date = i.split(' ')[0];
+            print(date);
+            insertDate(DateTime.parse(date));
           }
-          insertDate(DateTime.parse(date));
+
           showDialog(
             context: context,
             builder: (BuildContext context) => AlertDialog(
