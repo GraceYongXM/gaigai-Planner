@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'package:gaigai_planner/pages/event_tab/activities/activity_page.dart';
+import 'package:gaigai_planner/pages/event_tab/availability%20form/date_page.dart';
+import 'package:gaigai_planner/pages/event_tab/availability%20form/datepicker_form.dart';
 import 'package:gaigai_planner/pages/event_tab/send_event_invites/chat_settings/event_invitations_page.dart';
 
 import 'about_page.dart';
@@ -36,7 +40,7 @@ class _IndivPageState extends State<IndivPage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, initialIndex: 1, vsync: this);
+    _tabController = TabController(length: 4, initialIndex: 1, vsync: this);
     getData();
   }
 
@@ -96,11 +100,14 @@ class _IndivPageState extends State<IndivPage>
               icon: Icon(Icons.chat),
               text: 'Chat',
             ),
-            /*
             Tab(
               icon: Icon(Icons.list),
               text: 'Activities',
-            ),*/
+            ),
+            Tab(
+              icon: Icon(Icons.date_range),
+              text: 'Dates',
+            )
           ],
         ),
         actions: <Widget>[
@@ -240,6 +247,16 @@ class _IndivPageState extends State<IndivPage>
           ),
           ChatPage(
             eventDetails: widget.eventDetails,
+            user: widget.user,
+          ),
+          ActivityPage(
+            name: widget.eventDetails.name,
+          ),
+          /*DatePage(
+            name: widget.eventDetails.name,
+          )*/
+          DatePickerForm(
+            details: widget.eventDetails,
             user: widget.user,
           ),
         ],
