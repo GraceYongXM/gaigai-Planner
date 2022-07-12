@@ -5,8 +5,10 @@ import 'package:gaigai_planner/pages/event_tab/activities/activity_page.dart';
 import 'package:gaigai_planner/pages/event_tab/availability%20form/date_page.dart';
 import 'package:gaigai_planner/pages/event_tab/availability%20form/datepicker_form.dart';
 import 'package:gaigai_planner/pages/event_tab/send_event_invites/chat_settings/event_invitations_page.dart';
+import 'package:gaigai_planner/services/form_service.dart';
 
 import 'about_page.dart';
+import 'availability form/wait_page.dart';
 import 'chat_page.dart';
 import '../home_page.dart';
 import '../event_tab/send_event_invites/chat_settings/edit_form_page.dart';
@@ -33,6 +35,8 @@ class _IndivPageState extends State<IndivPage>
     'Delete event'
   ];
   final _supabaseClient = ChatService();
+  FormService formClient = FormService();
+  late bool isFormDone = false;
   String ownerName = '';
   List<String> members = [];
   late TabController _tabController;
@@ -42,6 +46,7 @@ class _IndivPageState extends State<IndivPage>
     super.initState();
     _tabController = TabController(length: 4, initialIndex: 1, vsync: this);
     getData();
+    isFormDoneFunction(widget.user.id, widget.eventDetails.eventID);
   }
 
   void getData() async {
@@ -59,6 +64,10 @@ class _IndivPageState extends State<IndivPage>
         members = names;
       });
     }
+  }
+
+  void isFormDoneFunction(String userID, String eventID) async {
+    isFormDone = await formClient.isFormDone(userID, eventID);
   }
 
   @override
@@ -250,15 +259,20 @@ class _IndivPageState extends State<IndivPage>
             user: widget.user,
           ),
           ActivityPage(
-            name: widget.eventDetails.name,
+            eventID: widget.eventDetails.eventID,
           ),
           /*DatePage(
             name: widget.eventDetails.name,
           )*/
-          DatePickerForm(
-            details: widget.eventDetails,
-            user: widget.user,
-          ),
+          isFormDone
+              ? WaitPage(
+                  user: widget.user,
+                  eventDetails: widget.eventDetails,
+                )
+              : DatePickerForm(
+                  details: widget.eventDetails,
+                  user: widget.user,
+                ),
         ],
       ),
     );
