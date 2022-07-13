@@ -60,11 +60,12 @@ class DatePickerService {
       List<double> latitudes = [];
       List<double> longitudes = [];
       for (String location in locations) {
-        print(location);
-        List<Location> possibleLocations =
-            await locationFromAddress(location, localeIdentifier: 'en_SG');
-        latitudes.add(possibleLocations[0].latitude);
-        longitudes.add(possibleLocations[0].longitude);
+        try {
+          List<Location> possibleLocations =
+              await locationFromAddress(location, localeIdentifier: 'en_SG');
+          latitudes.add(possibleLocations[0].latitude);
+          longitudes.add(possibleLocations[0].longitude);
+        } catch (e) {}
       }
 
       final results3 = response3.data as List<dynamic>;
@@ -83,7 +84,7 @@ class DatePickerService {
       double totalDistance = 0;
 
       for (Activity activity in activities) {
-        for (int i = 0; i < locations.length; i++) {
+        for (int i = 0; i < latitudes.length; i++) {
           totalDistance += Geolocator.distanceBetween(latitudes[i],
               longitudes[i], activity.latitude, activity.longitude);
         }

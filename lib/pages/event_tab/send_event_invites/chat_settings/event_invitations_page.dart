@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 
 import 'self_invitation_info.dart';
 import 'package:gaigai_planner/models/event_details.dart';

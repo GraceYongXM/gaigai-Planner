@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'package:gaigai_planner/pages/edit_profile%20pages/edit_username.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/user.dart' as model;
@@ -83,7 +82,6 @@ class UserService {
       'bio': '',
     }).execute();
     if (response.error == null) {
-      final results = response.data as List<dynamic>;
       log('success');
     } else {
       log('Error inserting user: ${response.error!.message}');

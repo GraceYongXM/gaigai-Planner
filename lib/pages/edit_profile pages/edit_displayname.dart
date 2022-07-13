@@ -82,7 +82,7 @@ class _EditDisplayNameState extends State<EditDisplayName> {
                 );
               }
             },
-            icon: Icon(Icons.done),
+            icon: const Icon(Icons.done),
           ),
         ],
       ),
@@ -93,7 +93,7 @@ class _EditDisplayNameState extends State<EditDisplayName> {
             decoration: InputDecoration(
               hintText: widget.user.displayName,
               helperText: 'Enter your desired display name',
-              contentPadding: EdgeInsets.all(20),
+              contentPadding: const EdgeInsets.all(20),
             ),
             validator: (String? value) {
               if (value == null || value.isEmpty) {

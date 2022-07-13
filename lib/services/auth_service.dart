@@ -37,7 +37,7 @@ class AuthService {
       _persistSession(response.data!);
       return true;
     }
-    log('email: ${email} password: ${password}');
+    log('email: $email password: $password');
     log('Sign in error: ${response.error!.message}');
     return false;
   }

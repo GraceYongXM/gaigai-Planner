@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:gaigai_planner/pages/edit_profile%20pages/edit_profile_page.dart';
 import 'package:gaigai_planner/pages/profile_page.dart';
@@ -84,7 +82,7 @@ class _EditUsernameState extends State<EditUsername> {
                 );
               }
             },
-            icon: Icon(Icons.done),
+            icon: const Icon(Icons.done),
           ),
         ],
       ),
@@ -95,7 +93,7 @@ class _EditUsernameState extends State<EditUsername> {
             decoration: InputDecoration(
               hintText: widget.username,
               helperText: 'Enter your desired username',
-              contentPadding: EdgeInsets.all(20),
+              contentPadding: const EdgeInsets.all(20),
             ),
             onChanged: (text) async {
               var isUniqueAsync = await _supabaseClient.uniqueUsername(text);

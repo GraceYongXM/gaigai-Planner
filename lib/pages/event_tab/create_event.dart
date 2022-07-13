@@ -76,8 +76,6 @@ class _CreateEventState extends State<CreateEvent> {
   Widget build(BuildContext context) {
     final start = dateRange.start;
     final end = dateRange.end;
-    final expansionTileTheme =
-        Theme.of(context).copyWith(dividerColor: Colors.transparent);
 
     return Scaffold(
       appBar: AppBar(
@@ -276,7 +274,7 @@ class _CreateEventState extends State<CreateEvent> {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => sendEventInvite(
+                                    builder: (context) => SendEventInvite(
                                       user: widget.user,
                                       friends: friendInfo
                                           .map((e) => {
@@ -312,7 +310,7 @@ class _CreateEventState extends State<CreateEvent> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => sendEventInvite(
+                          builder: (context) => SendEventInvite(
                             user: widget.user,
                             friends: friendInfo
                                 .map((e) =>

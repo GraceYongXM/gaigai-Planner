@@ -121,8 +121,8 @@ class _ChatPageState extends State<ChatPage> {
         padding: const EdgeInsets.only(bottom: 50),
         child: FloatingActionButton.small(
           onPressed: _scrollDown,
+          backgroundColor: const Color(0xffBB86FC),
           child: const Icon(Icons.keyboard_arrow_down),
-          backgroundColor: Color(0xffBB86FC),
         ),
       ),
       body: isLoading
@@ -184,8 +184,8 @@ class _ChatPageState extends State<ChatPage> {
                           _scrollController.jumpTo(
                               _scrollController.position.maxScrollExtent);
                         },
-                        icon: Icon(Icons.send),
-                        color: Color(0xffBB86FC),
+                        icon: const Icon(Icons.send),
+                        color: const Color(0xffBB86FC),
                       )
                     ],
                   ),
@@ -197,10 +197,10 @@ class _ChatPageState extends State<ChatPage> {
 }
 
 class TimeTile extends StatelessWidget {
-  DateTime datetime;
-  bool right;
+  final DateTime datetime;
+  final bool right;
 
-  TimeTile({Key? key, required this.datetime, required this.right})
+  const TimeTile({Key? key, required this.datetime, required this.right})
       : super(key: key);
 
   @override
@@ -225,9 +225,9 @@ class TimeTile extends StatelessWidget {
 }
 
 class OwnMessageTile extends StatelessWidget {
-  String message;
+  final String message;
 
-  OwnMessageTile({
+  const OwnMessageTile({
     Key? key,
     required this.message,
   }) : super(key: key);
@@ -242,12 +242,12 @@ class OwnMessageTile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Container(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
               decoration: BoxDecoration(
                 color: Colors.blueAccent.shade100,
                 borderRadius: BorderRadius.circular(25),
               ),
-              child: Text(message, style: TextStyle(fontSize: 15)),
+              child: Text(message, style: const TextStyle(fontSize: 15)),
             ),
           ],
         ),
@@ -257,9 +257,9 @@ class OwnMessageTile extends StatelessWidget {
 }
 
 class MessageTile extends StatelessWidget {
-  String message;
+  final String message;
 
-  MessageTile({
+  const MessageTile({
     Key? key,
     required this.message,
   }) : super(key: key);
@@ -274,14 +274,14 @@ class MessageTile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
               decoration: BoxDecoration(
                 color: Colors.deepPurple.shade100,
                 borderRadius: BorderRadius.circular(25),
               ),
               child: Text(
                 message,
-                style: TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 15),
               ),
             ),
           ],
@@ -292,10 +292,10 @@ class MessageTile extends StatelessWidget {
 }
 
 class MessageTileWithName extends StatelessWidget {
-  String message;
-  String name;
+  final String message;
+  final String name;
 
-  MessageTileWithName({
+  const MessageTileWithName({
     Key? key,
     required this.message,
     required this.name,
@@ -311,7 +311,7 @@ class MessageTileWithName extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
               decoration: BoxDecoration(
                 color: Colors.deepPurple.shade100,
                 borderRadius: BorderRadius.circular(20),
@@ -320,9 +320,9 @@ class MessageTileWithName extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(name,
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-                  Text(message, style: TextStyle(fontSize: 15)),
+                      style: const TextStyle(
+                          fontSize: 12, fontWeight: FontWeight.bold)),
+                  Text(message, style: const TextStyle(fontSize: 15)),
                 ],
               ),
             ),
@@ -334,9 +334,9 @@ class MessageTileWithName extends StatelessWidget {
 }
 
 class DateTile extends StatelessWidget {
-  String date;
+  final String date;
 
-  DateTile({Key? key, required this.date}) : super(key: key);
+  const DateTile({Key? key, required this.date}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -345,7 +345,7 @@ class DateTile extends StatelessWidget {
       child: Align(
         alignment: Alignment.center,
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
           decoration: BoxDecoration(
             color: Colors.grey.shade700,
             borderRadius: BorderRadius.circular(30),

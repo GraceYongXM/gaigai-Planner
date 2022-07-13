@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 import 'package:gaigai_planner/pages/event_tab/activities/activity_page.dart';
-import 'package:gaigai_planner/pages/event_tab/availability%20form/date_page.dart';
 import 'package:gaigai_planner/pages/event_tab/availability%20form/datepicker_form.dart';
 import 'package:gaigai_planner/pages/event_tab/send_event_invites/chat_settings/event_invitations_page.dart';
+import 'package:gaigai_planner/services/datepicker_service.dart';
 import 'package:gaigai_planner/services/form_service.dart';
 
 import 'about_page.dart';
@@ -36,9 +37,13 @@ class _IndivPageState extends State<IndivPage>
   ];
   final _supabaseClient = ChatService();
   FormService formClient = FormService();
-  late bool isFormDone = false;
+  DatePickerService datePickerService = DatePickerService();
+  bool isFormDone = false;
+  bool everyoneSubmitted = false;
+  bool isLoading = true;
   String ownerName = '';
   List<String> members = [];
+  List<DateTime> commonDates = [];
   late TabController _tabController;
 
   @override
@@ -54,14 +59,36 @@ class _IndivPageState extends State<IndivPage>
         (await _supabaseClient.getOwner(widget.eventDetails.ownerID))!;
     List<Map<String, String>> memberNames =
         await _supabaseClient.getMembers(widget.eventDetails.eventID);
+    bool everyoneCompleted =
+        await datePickerService.everyoneSubmitted(widget.eventDetails.eventID);
     List<String> names = [];
     for (Map<String, String> map in memberNames) {
       names.add(map['display_name']!);
     }
+
     if (this.mounted) {
       setState(() {
         ownerName = name;
         members = names;
+        everyoneSubmitted = everyoneCompleted;
+      });
+    }
+    if (everyoneCompleted) {
+      List<DateTime> dates = await _supabaseClient.getCommonDates(
+          widget.eventDetails.startDate,
+          widget.eventDetails.endDate,
+          widget.eventDetails.eventID,
+          memberNames.length);
+
+      if (this.mounted) {
+        setState(() {
+          commonDates = dates;
+        });
+      }
+    }
+    if (this.mounted) {
+      setState(() {
+        isLoading = false;
       });
     }
   }
@@ -187,7 +214,7 @@ class _IndivPageState extends State<IndivPage>
                                         text: widget.eventDetails.eventID));
                                     Navigator.pop(context);
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
+                                        const SnackBar(
                                             content:
                                                 Text('Copied to clipboard.')));
                                   },
@@ -248,31 +275,51 @@ class _IndivPageState extends State<IndivPage>
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
-          AboutPage(
-            eventDetails: widget.eventDetails,
-            user: widget.user,
-            ownerName: ownerName,
-            members: members,
-          ),
+          isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : AboutPage(
+                  eventDetails: widget.eventDetails,
+                  user: widget.user,
+                  ownerName: ownerName,
+                  members: members,
+                ),
           ChatPage(
             eventDetails: widget.eventDetails,
             user: widget.user,
           ),
-          ActivityPage(
-            eventID: widget.eventDetails.eventID,
-          ),
-          /*DatePage(
-            name: widget.eventDetails.name,
-          )*/
-          isFormDone
-              ? WaitPage(
-                  user: widget.user,
-                  eventDetails: widget.eventDetails,
-                )
-              : DatePickerForm(
-                  details: widget.eventDetails,
-                  user: widget.user,
+          isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : ActivityPage(
+                  event: widget.eventDetails,
                 ),
+          isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : everyoneSubmitted
+                  ? commonDates.isEmpty
+                      ? const Padding(
+                          padding: EdgeInsets.all(20.0),
+                          child: Text(
+                            'No Common Dates',
+                            style: TextStyle(fontSize: 20),
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      : ListView.separated(
+                          itemBuilder: ((context, index) => ListTile(
+                              title: Text(DateFormat('yMMMd')
+                                  .format(commonDates[index])))),
+                          separatorBuilder: ((context, index) =>
+                              const Divider(thickness: 1)),
+                          itemCount: commonDates.length)
+                  : isFormDone
+                      ? WaitPage(
+                          user: widget.user,
+                          eventDetails: widget.eventDetails,
+                        )
+                      : DatePickerForm(
+                          details: widget.eventDetails,
+                          user: widget.user,
+                        ),
         ],
       ),
     );

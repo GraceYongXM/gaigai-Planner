@@ -54,7 +54,7 @@ class GaigaiPlanner extends StatelessWidget {
             colorScheme: defaultColorScheme,
             primarySwatch: Colors.blue,
           ),
-          home: LoginPage(
+          home: const LoginPage(
             title: 'Login UI',
           ),
         ),

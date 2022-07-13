@@ -411,12 +411,12 @@ class _FriendPageState extends State<FriendPage> {
 }
 
 class FriendTile extends StatelessWidget {
-  int index;
-  User user;
-  List<User> friendInfo;
-  List<Friend> friends;
+  final int index;
+  final User user;
+  final List<User> friendInfo;
+  final List<Friend> friends;
 
-  FriendTile(
+  const FriendTile(
       {Key? key,
       required this.index,
       required this.user,

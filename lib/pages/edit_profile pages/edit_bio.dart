@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 import '../../models/user.dart';
 import '../../services/user_service.dart';
@@ -82,7 +80,7 @@ class _EditBioState extends State<EditBio> {
                 );
               }
             },
-            icon: Icon(Icons.done),
+            icon: const Icon(Icons.done),
           ),
         ],
       ),
@@ -93,7 +91,7 @@ class _EditBioState extends State<EditBio> {
             decoration: InputDecoration(
               hintText: widget.bio,
               helperText: 'Enter your desired biography',
-              contentPadding: EdgeInsets.all(20),
+              contentPadding: const EdgeInsets.all(20),
             ),
             validator: (String? value) {
               if (value == null || value.isEmpty) {

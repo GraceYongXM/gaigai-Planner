@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gaigai_planner/models/event_details.dart';
 import 'package:gaigai_planner/models/user.dart';
-import 'package:gaigai_planner/pages/event_tab/availability%20form/datepicker_form.dart';
 import 'package:gaigai_planner/pages/event_tab/availability%20form/update_date.dart';
 import 'package:gaigai_planner/services/form_service.dart';
 

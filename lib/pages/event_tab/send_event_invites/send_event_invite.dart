@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gaigai_planner/models/event_details.dart';
-import 'package:gaigai_planner/pages/event_tab/create_event.dart';
 import 'package:gaigai_planner/pages/event_tab/send_event_invites/send_invite.dart';
 
-import '../../../models/friend.dart';
 import '../../../models/user.dart';
 
-class sendEventInvite extends StatefulWidget {
-  sendEventInvite({
+class SendEventInvite extends StatefulWidget {
+  SendEventInvite({
     super.key,
     required this.user,
     required this.uninvited,
@@ -22,10 +20,10 @@ class sendEventInvite extends StatefulWidget {
   final EventDetails event;
 
   @override
-  State<sendEventInvite> createState() => _sendEventInviteState();
+  State<SendEventInvite> createState() => _SendEventInviteState();
 }
 
-class _sendEventInviteState extends State<sendEventInvite>
+class _SendEventInviteState extends State<SendEventInvite>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
@@ -101,7 +99,7 @@ class _sendEventInviteState extends State<sendEventInvite>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(e['display_name']!),
-                        Icon(
+                        const Icon(
                           Icons.close,
                           color: Colors.black,
                         ),

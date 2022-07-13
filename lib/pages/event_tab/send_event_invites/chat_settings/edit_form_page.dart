@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -117,9 +115,6 @@ class _EditFormPageState extends State<EditFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    final expansionTileTheme =
-        Theme.of(context).copyWith(dividerColor: Colors.transparent);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Event Creation Form'),
@@ -135,8 +130,7 @@ class _EditFormPageState extends State<EditFormPage> {
           IconButton(
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
-                print(dateRange.start);
-                print(dateRange.end);
+                await _supabaseClient.deleteForms(widget.eventDetails.eventID);
                 await _supabaseClient.updateEvent(
                     id: widget.eventDetails.eventID,
                     name: nameController.text,

@@ -26,7 +26,6 @@ void extractData() async {
         String className = 'results';
 
         for (int j = 0; j <= 20; j++) {
-          print(index);
           index++;
 
           //looping through 21 results on each page
@@ -113,9 +112,7 @@ void extractData() async {
                 cost: finalCost,
                 description: description,
               );
-            } catch (e) {
-              print('error here ${e.toString()}');
-            }
+            } catch (e) {}
           }
         }
       }

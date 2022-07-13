@@ -1,13 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:gaigai_planner/models/event_details.dart';
 import 'package:gaigai_planner/models/user.dart';
-import 'package:gaigai_planner/pages/event_tab/availability%20form/wait_page.dart';
+import 'package:gaigai_planner/pages/event_tab/indiv_page.dart';
 import 'package:gaigai_planner/services/datepicker_service.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-
-import 'date_page.dart';
 
 class DatePickerForm extends StatefulWidget {
   const DatePickerForm({super.key, required this.details, required this.user});
@@ -56,7 +52,6 @@ class _DatePickerFormState extends State<DatePickerForm> {
           String date = '';
           for (var i in dateList) {
             date = i.split(' ')[0];
-            print(date);
             insertDate(DateTime.parse(date));
           }
 
@@ -86,12 +81,8 @@ class _DatePickerFormState extends State<DatePickerForm> {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => everyoneSubmitted
-                            ? DatePage()
-                            : WaitPage(
-                                user: widget.user,
-                                eventDetails: widget.details,
-                              ),
+                        builder: (context) => IndivPage(
+                            user: widget.user, eventDetails: widget.details),
                       ),
                     );
                   },

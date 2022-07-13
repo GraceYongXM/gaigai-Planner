@@ -8,6 +8,58 @@ class ChatService {
   final _client = SupabaseClient('https://xvjretabvavhxqyaftsr.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2anJldGFidmF2aHhxeWFmdHNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTQ1OTEzMzYsImV4cCI6MTk3MDE2NzMzNn0.3Iuz9BYCPWVDbELfJa2b_jzU9OVzW95St099K2RS_YU');
 
+  Future<void> deleteForms(String eventID) async {
+    final response = await _client
+        .from('form_dates')
+        .delete(returning: ReturningOption.minimal)
+        .eq('event_id', eventID)
+        .execute();
+    final response2 = await _client
+        .from('events_users')
+        .update({'location': null})
+        .eq('event_id', eventID)
+        .execute();
+    if (response.error != null) {
+      log(response.error!.message);
+    }
+    if (response2.error != null) {
+      log(response2.error!.message);
+    }
+  }
+
+  Future<List<DateTime>> getCommonDates(DateTime startDate, DateTime endDate,
+      String eventID, int numOfMembers) async {
+    DateTime date = startDate;
+    List<DateTime> commonDates = [];
+    while (date.year != endDate.year ||
+        date.month != endDate.month ||
+        date.day != endDate.day) {
+      final response = await _client.from('form_dates').select().match({
+        'event_id': eventID,
+        'date': '${date.month}/${date.day}/${date.year}'
+      }).execute();
+      if (response.error == null) {
+        final results = response.data as List<dynamic>;
+        if (results.length == numOfMembers) {
+          commonDates.add(DateTime(date.year, date.month, date.day));
+        }
+      }
+      date = date.add(const Duration(days: 1));
+    }
+
+    final response = await _client.from('form_dates').select().match({
+      'event_id': eventID,
+      'date': '${date.month}/${date.day}/${date.year}'
+    }).execute();
+    if (response.error == null) {
+      final results = response.data as List<dynamic>;
+      if (results.length == numOfMembers) {
+        commonDates.add(DateTime(date.year, date.month, date.day));
+      }
+    }
+    return commonDates;
+  }
+
   Future<List<Map<String, String>>> getMembers(String eventID) async {
     final response = await _client
         .from('events_users')
@@ -146,7 +198,7 @@ class ChatService {
         .execute();
     log(delete3.error == null
         ? 'delete3 success'
-        : 'Error in delete3: ${delete2.error!.message}');
+        : 'Error in delete3: ${delete3.error!.message}');
 
     final delete4 = await _client
         .from('event_invitations')
@@ -155,7 +207,16 @@ class ChatService {
         .execute();
     log(delete4.error == null
         ? 'delete4 success'
-        : 'Error in delete4: ${delete2.error!.message}');
+        : 'Error in delete4: ${delete4.error!.message}');
+
+    final delete5 = await _client
+        .from('form_dates')
+        .delete(returning: ReturningOption.minimal)
+        .eq('event_id', eventID)
+        .execute();
+    log(delete5.error == null
+        ? 'delete5 success'
+        : 'Error in delete5: ${delete5.error!.message}');
   }
 
   Future<void> updateEvent(

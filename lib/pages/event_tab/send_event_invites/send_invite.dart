@@ -162,7 +162,7 @@ class _SendInviteState extends State<SendInvite>
           onPressed: () => Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => sendEventInvite(
+              builder: (context) => SendEventInvite(
                 event: widget.event,
                 user: widget.user,
                 friends: widget.friends,
@@ -287,7 +287,7 @@ class _SendInviteState extends State<SendInvite>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(e['display_name']!),
-                        Icon(
+                        const Icon(
                           Icons.close,
                           color: Colors.black,
                         ),
