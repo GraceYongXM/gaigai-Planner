@@ -3,11 +3,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:gaigai_planner/models/event_details.dart';
 import 'package:gaigai_planner/models/user.dart';
-import 'package:gaigai_planner/pages/event_tab/about_page.dart';
-import 'package:gaigai_planner/pages/event_tab/availability%20form/date_page.dart';
+import 'package:gaigai_planner/pages/event_tab/availability%20form/wait_page.dart';
 import 'package:gaigai_planner/services/datepicker_service.dart';
-import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+
+import 'date_page.dart';
 
 class DatePickerForm extends StatefulWidget {
   const DatePickerForm({super.key, required this.details, required this.user});
@@ -20,8 +20,9 @@ class DatePickerForm extends StatefulWidget {
 
 class _DatePickerFormState extends State<DatePickerForm> {
   DatePickerService datePickerClient = DatePickerService();
-  DateRangePickerController _controller = DateRangePickerController();
+  final DateRangePickerController _controller = DateRangePickerController();
   final _locationController = TextEditingController();
+  bool everyoneSubmitted = false;
 
   void insertDate(DateTime date) {
     datePickerClient.insertDate(widget.details.eventID, widget.user.id, date);
@@ -33,7 +34,7 @@ class _DatePickerFormState extends State<DatePickerForm> {
   }
 
   void insertActivities() async {
-    bool everyoneSubmitted =
+    everyoneSubmitted =
         await datePickerClient.everyoneSubmitted(widget.details.eventID);
     if (everyoneSubmitted) {
       datePickerClient.insertActivities(widget.details.eventID);
@@ -64,11 +65,13 @@ class _DatePickerFormState extends State<DatePickerForm> {
             builder: (BuildContext context) => AlertDialog(
               title: const Text('Enter your location (optional)'),
               content: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   TextField(
                     controller: _locationController,
+                    minLines: 1,
                     maxLines: 2,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'Location',
                       labelText: 'Location',
                     ),
@@ -83,7 +86,12 @@ class _DatePickerFormState extends State<DatePickerForm> {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => DatePage(),
+                        builder: (context) => everyoneSubmitted
+                            ? DatePage()
+                            : WaitPage(
+                                user: widget.user,
+                                eventDetails: widget.details,
+                              ),
                       ),
                     );
                   },

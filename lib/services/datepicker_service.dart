@@ -148,4 +148,18 @@ class DatePickerService {
       log('Error in insertLocation: ${response.error!.message}');
     }
   }
+
+  Future<bool> deleteDates(String userID, String eventID) async {
+    var response = await _client.from('form_dates').delete().match({
+      'event_id': eventID,
+      'user_id': userID,
+    }).execute();
+    if (response.error == null) {
+      log('success in deleteDate');
+      return true;
+    } else {
+      log('Error in deleteDate: ${response.error!.message}');
+    }
+    return false;
+  }
 }

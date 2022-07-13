@@ -4,6 +4,7 @@ import 'pages/signin_signup/login_page.dart';
 import 'pages/signin_signup/signup_page.dart';
 import 'webscrape.dart';
 import 'services/services.dart';
+//import 'location_webscrape.rmd';
 
 Future<void> main() async {
   runApp(GaigaiPlanner());
@@ -38,6 +39,7 @@ class GaigaiPlanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     extractData();
+    //getTravelTime();
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Services(
