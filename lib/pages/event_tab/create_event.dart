@@ -76,8 +76,6 @@ class _CreateEventState extends State<CreateEvent> {
   Widget build(BuildContext context) {
     final start = dateRange.start;
     final end = dateRange.end;
-    final expansionTileTheme =
-        Theme.of(context).copyWith(dividerColor: Colors.transparent);
 
     return Scaffold(
       appBar: AppBar(
@@ -248,7 +246,8 @@ class _CreateEventState extends State<CreateEvent> {
                           ],
                         ),
                       );
-                    } else {
+                    } else if (end
+                        .isAfter(start.add(const Duration(days: 60)))) {
                       showDialog<String>(
                         context: context,
                         builder: (BuildContext context) => AlertDialog(
@@ -275,7 +274,7 @@ class _CreateEventState extends State<CreateEvent> {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => sendEventInvite(
+                                    builder: (context) => SendEventInvite(
                                       user: widget.user,
                                       friends: friendInfo
                                           .map((e) => {
@@ -298,6 +297,32 @@ class _CreateEventState extends State<CreateEvent> {
                               child: const Text('Confirm'),
                             ),
                           ],
+                        ),
+                      );
+                    } else {
+                      var eventDetails = (await createEvent(
+                        nameController.text,
+                        widget.user.id,
+                        descriptionController.text,
+                        start,
+                        end,
+                      ))[0];
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SendEventInvite(
+                            user: widget.user,
+                            friends: friendInfo
+                                .map((e) =>
+                                    {'display_name': e.displayName, 'id': e.id})
+                                .toList(),
+                            uninvited: friendInfo
+                                .map((e) =>
+                                    {'display_name': e.displayName, 'id': e.id})
+                                .toList(),
+                            invited: [],
+                            event: eventDetails,
+                          ),
                         ),
                       );
                     }

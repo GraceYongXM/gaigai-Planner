@@ -36,7 +36,9 @@ class _AboutPageState extends State<AboutPage> {
       names += widget.user.displayName == name ? 'You' : name;
       names += ', ';
     }
-    names = names.substring(0, names.length - 2);
+    try {
+      names = names.substring(0, names.length - 2);
+    } catch (e) {}
   }
 
   @override

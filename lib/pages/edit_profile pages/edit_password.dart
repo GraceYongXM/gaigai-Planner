@@ -26,7 +26,7 @@ class _EditPasswordState extends State<EditPassword> {
       log('success password update');
     } else {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Update password error')));
+          .showSnackBar(const SnackBar(content: Text('Update password error')));
     }
   }
 
@@ -121,7 +121,7 @@ class _EditPasswordState extends State<EditPassword> {
         child: TextFormField(
           controller: newPasswordController,
           obscureText: true,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             helperText: 'Enter your new password',
             contentPadding: EdgeInsets.all(20),
           ),

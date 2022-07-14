@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:gaigai_planner/models/activity.dart';
-import 'package:gaigai_planner/services/activity_service.dart';
+
+import 'package:gaigai_planner/models/event_details.dart';
+
+import '../../../models/activity.dart';
+import '../../../services/activity_service.dart';
 
 class ActivityPage extends StatefulWidget {
-  const ActivityPage({super.key, required this.eventID});
-  final String eventID;
+  const ActivityPage({super.key, required this.event});
+  final EventDetails event;
 
   @override
   State<ActivityPage> createState() => _ActivityPageState();

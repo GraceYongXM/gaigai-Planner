@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:gaigai_planner/pages/profile_page.dart';
 import '../services/services.dart';
-import 'event_tab/availability form/datepicker_form.dart';
 import 'event_tab/event_page.dart';
 import 'friend_tab/friend_page.dart';
 import 'request_tab/request_page.dart';
@@ -25,8 +24,8 @@ class _HomePageState extends State<HomePage>
 
   void _signOut() async {
     await Services.of(context).authService.signOut();
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text('Successfully signed out.')));
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Successfully signed out.')));
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(

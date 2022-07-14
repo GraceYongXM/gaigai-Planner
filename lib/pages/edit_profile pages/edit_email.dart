@@ -31,7 +31,7 @@ class _EditEmailState extends State<EditEmail> {
       log('success email update');
     } else {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Update email error')));
+          .showSnackBar(const SnackBar(content: Text('Update email error')));
     }
     _supabaseClient.updateEmail(newEmail, oldEmail);
   }
@@ -101,7 +101,7 @@ class _EditEmailState extends State<EditEmail> {
             decoration: InputDecoration(
               hintText: widget.user.email,
               helperText: 'Enter your new email',
-              contentPadding: EdgeInsets.all(20),
+              contentPadding: const EdgeInsets.all(20),
             ),
             onChanged: (text) async {
               var isUniqueAsync = await _supabaseClient.uniqueEmail(text);

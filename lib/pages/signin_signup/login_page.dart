@@ -46,8 +46,8 @@ class _LoginPageState extends State<LoginPage> {
           .signIn(user!.email, _passwordController.text);
 
       if (success) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Successfully logged in.')));
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Successfully logged in.')));
         await Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -184,10 +184,10 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                    children: const [
                       TextButton(
                         onPressed: null,
-                        child: const Text('Forgot password'),
+                        child: Text('Forgot password'),
                       ),
                     ],
                   ),

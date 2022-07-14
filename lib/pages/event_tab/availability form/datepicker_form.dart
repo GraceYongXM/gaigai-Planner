@@ -1,12 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:gaigai_planner/models/event_details.dart';
 import 'package:gaigai_planner/models/user.dart';
-import 'package:gaigai_planner/pages/event_tab/about_page.dart';
-import 'package:gaigai_planner/pages/event_tab/availability%20form/date_page.dart';
+import 'package:gaigai_planner/pages/event_tab/indiv_page.dart';
 import 'package:gaigai_planner/services/datepicker_service.dart';
-import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class DatePickerForm extends StatefulWidget {
@@ -20,8 +16,9 @@ class DatePickerForm extends StatefulWidget {
 
 class _DatePickerFormState extends State<DatePickerForm> {
   DatePickerService datePickerClient = DatePickerService();
-  DateRangePickerController _controller = DateRangePickerController();
+  final DateRangePickerController _controller = DateRangePickerController();
   final _locationController = TextEditingController();
+  bool everyoneSubmitted = false;
 
   void insertDate(DateTime date) {
     datePickerClient.insertDate(widget.details.eventID, widget.user.id, date);
@@ -32,6 +29,14 @@ class _DatePickerFormState extends State<DatePickerForm> {
         widget.details.eventID, widget.user.id, location);
   }
 
+  void insertActivities() async {
+    everyoneSubmitted =
+        await datePickerClient.everyoneSubmitted(widget.details.eventID);
+    if (everyoneSubmitted) {
+      datePickerClient.insertActivities(widget.details.eventID);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,22 +45,28 @@ class _DatePickerFormState extends State<DatePickerForm> {
         showActionButtons: true,
         controller: _controller,
         onSubmit: (val) {
-          var dateList = val.toString().split(',');
+          var dateListString = val.toString();
+          var dateList = dateListString
+              .substring(1, dateListString.length - 1)
+              .split(', ');
           String date = '';
           for (var i in dateList) {
-            date = i.split(' ')[0].substring(1);
+            date = i.split(' ')[0];
+            insertDate(DateTime.parse(date));
           }
-          insertDate(DateTime.parse(date));
+
           showDialog(
             context: context,
             builder: (BuildContext context) => AlertDialog(
               title: const Text('Enter your location (optional)'),
               content: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   TextField(
                     controller: _locationController,
+                    minLines: 1,
                     maxLines: 2,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'Location',
                       labelText: 'Location',
                     ),
@@ -66,10 +77,12 @@ class _DatePickerFormState extends State<DatePickerForm> {
                 TextButton(
                   onPressed: () {
                     insertLocation(_locationController.text);
+                    insertActivities();
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => DatePage(),
+                        builder: (context) => IndivPage(
+                            user: widget.user, eventDetails: widget.details),
                       ),
                     );
                   },

@@ -78,9 +78,9 @@ class _EventPageState extends State<EventPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: const Text('Input the invitation code:'),
+                            const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text('Input the invitation code:'),
                             ),
                             TextField(
                               controller: _controller,
@@ -247,9 +247,7 @@ class _EventPageState extends State<EventPage> {
                       const Text('You have not created any events.',
                           style: TextStyle(fontSize: 18)),
                       TextButton(
-                        onPressed: () {
-                          newEvent;
-                        },
+                        onPressed: newEvent,
                         child: const Text(
                           'Create new event/Join event',
                           style: TextStyle(fontSize: 18),
@@ -260,7 +258,7 @@ class _EventPageState extends State<EventPage> {
                 )
               : ListView.separated(
                   shrinkWrap: true,
-                  physics: AlwaysScrollableScrollPhysics(),
+                  physics: const AlwaysScrollableScrollPhysics(),
                   itemCount: events.length,
                   itemBuilder: (context, index) => ListTile(
                     title: Text(events[index].name),
@@ -294,11 +292,11 @@ class _EventPageState extends State<EventPage> {
 }
 
 class EventTile extends StatelessWidget {
-  int index;
-  User user;
-  List<EventDetails> eventInfo;
+  final int index;
+  final User user;
+  final List<EventDetails> eventInfo;
 
-  EventTile(
+  const EventTile(
       {Key? key,
       required this.index,
       required this.user,

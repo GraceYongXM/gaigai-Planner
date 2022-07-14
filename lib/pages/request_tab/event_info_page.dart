@@ -15,64 +15,62 @@ class EventInfoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            ListTile(
-              title: Text(
-                'You have been invited by $requesterName!',
-                style: TextStyle(
-                  fontSize: 18,
-                ),
+      body: Column(
+        children: <Widget>[
+          ListTile(
+            title: Text(
+              'You have been invited by $requesterName!',
+              style: const TextStyle(
+                fontSize: 18,
               ),
             ),
-            const Divider(),
-            ListTile(
-              title: const Text(
-                'Event name',
-                style: TextStyle(
-                  fontSize: 18,
-                ),
-              ),
-              subtitle: Text(
-                name,
-                style: const TextStyle(
-                  fontSize: 15,
-                ),
+          ),
+          const Divider(),
+          ListTile(
+            title: const Text(
+              'Event name',
+              style: TextStyle(
+                fontSize: 18,
               ),
             ),
-            const Divider(),
-            ListTile(
-              title: const Text(
-                'Event description',
-                style: TextStyle(
-                  fontSize: 18,
-                ),
-              ),
-              subtitle: Text(
-                description,
-                style: const TextStyle(
-                  fontSize: 15,
-                ),
+            subtitle: Text(
+              name,
+              style: const TextStyle(
+                fontSize: 15,
               ),
             ),
-            const Divider(),
-            ListTile(
-              title: const Text(
-                'Invitation date',
-                style: TextStyle(
-                  fontSize: 18,
-                ),
-              ),
-              subtitle: Text(
-                invitationDate.toIso8601String().substring(0, 10),
-                style: const TextStyle(
-                  fontSize: 15,
-                ),
+          ),
+          const Divider(),
+          ListTile(
+            title: const Text(
+              'Event description',
+              style: TextStyle(
+                fontSize: 18,
               ),
             ),
-          ],
-        ),
+            subtitle: Text(
+              description,
+              style: const TextStyle(
+                fontSize: 15,
+              ),
+            ),
+          ),
+          const Divider(),
+          ListTile(
+            title: const Text(
+              'Invitation date',
+              style: TextStyle(
+                fontSize: 18,
+              ),
+            ),
+            subtitle: Text(
+              invitationDate.toIso8601String().substring(0, 10),
+              style: const TextStyle(
+                fontSize: 15,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

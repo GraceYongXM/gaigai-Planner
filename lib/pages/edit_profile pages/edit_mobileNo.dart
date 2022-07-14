@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 import '../../models/user.dart';
 import '../../services/user_service.dart';
@@ -81,7 +80,7 @@ class _EditMobileNoState extends State<EditMobileNo> {
                 );
               }
             },
-            icon: Icon(Icons.done),
+            icon: const Icon(Icons.done),
           ),
         ],
       ),
@@ -92,7 +91,7 @@ class _EditMobileNoState extends State<EditMobileNo> {
             decoration: InputDecoration(
               hintText: widget.user.mobileNo,
               helperText: 'Enter your new mobile number',
-              contentPadding: EdgeInsets.all(20),
+              contentPadding: const EdgeInsets.all(20),
             ),
             onChanged: (text) async {
               var isUniqueAsync = await _supabaseClient.uniqueNumber(text);
