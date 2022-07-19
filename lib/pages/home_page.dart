@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:gaigai_planner/pages/profile_page.dart';
-import '../services/services.dart';
+import 'package:gaigai_planner/services/services.dart';
 import 'event_tab/event_page.dart';
 import 'friend_tab/friend_page.dart';
 import 'request_tab/request_page.dart';
-import '../models/user.dart';
+import 'package:gaigai_planner/models/user.dart';
 import 'signin_signup/login_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,6 +21,18 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  final menu = [
+    const PopupMenuItem<String>(
+      key: Key('profileButton'),
+      value: 'Profile',
+      child: Text('Profile'),
+    ),
+    const PopupMenuItem<String>(
+      key: Key('logOutButton'),
+      value: 'Log out',
+      child: Text('Log out'),
+    ),
+  ];
 
   void _signOut() async {
     await Services.of(context).authService.signOut();
@@ -72,18 +84,10 @@ class _HomePageState extends State<HomePage>
         ),
         actions: <Widget>[
           PopupMenuButton<String>(
+            key: const ValueKey('homePageSettings'),
             tooltip: 'Settings',
             itemBuilder: (BuildContext context) {
-              return <PopupMenuItem<String>>[
-                const PopupMenuItem<String>(
-                  value: 'Profile',
-                  child: Text('Profile'),
-                ),
-                const PopupMenuItem<String>(
-                  value: 'Log out',
-                  child: Text('Log out'),
-                ),
-              ];
+              return menu;
             },
             onSelected: (String choice) {
               if (choice == 'Log out') {

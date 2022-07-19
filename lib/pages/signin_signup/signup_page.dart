@@ -10,17 +10,61 @@ class RegisterPage extends StatefulWidget {
   final String title;
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<RegisterPage> createState() => RegisterPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final _supabaseClient = UserService();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _usernameController = TextEditingController();
   final _mobileNoController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   late bool username, phone, email;
+
+  static String? validateUsername(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Please enter your username";
+    }
+    return null;
+  }
+
+  static String? validateNumber(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your number';
+    } else if (value.length != 8) {
+      return "Please enter a valid number";
+    }
+    return null;
+  }
+
+  static String? validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your email';
+    } else if (!EmailValidator.validate(value)) {
+      return "Please enter a valid email";
+    }
+    return null;
+  }
+
+  static String? validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your password';
+    } else if (value.length < 6) {
+      return 'Password must be at least 6 characters';
+    }
+    return null;
+  }
+
+  static String? validateConfirmPassword(String? value, String password) {
+    if (value == null || value.isEmpty) {
+      return 'Please re-enter your password';
+    } else if (value != password) {
+      return 'Passwords do not match';
+    }
+    return null;
+  }
 
   Future<void> _validate() async {
     username = await _supabaseClient.uniqueUsername(_usernameController.text);
@@ -139,13 +183,9 @@ class _RegisterPageState extends State<RegisterPage> {
                         children: [
                           Expanded(
                             child: TextFormField(
+                              key: const ValueKey('usernameSignupField'),
                               controller: _usernameController,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "Please enter your username";
-                                }
-                                return null;
-                              },
+                              validator: validateUsername,
                               maxLines: 1,
                               decoration: InputDecoration(
                                 hintText: 'Username',
@@ -162,15 +202,9 @@ class _RegisterPageState extends State<RegisterPage> {
                         height: 20,
                       ),
                       TextFormField(
+                        key: const ValueKey('numberSignupField'),
                         controller: _mobileNoController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your number';
-                          } else if (value.length != 8) {
-                            return "Please enter a valid number";
-                          }
-                          return null;
-                        },
+                        validator: validateNumber,
                         maxLines: 1,
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.phone),
@@ -184,15 +218,9 @@ class _RegisterPageState extends State<RegisterPage> {
                         height: 20,
                       ),
                       TextFormField(
+                        key: const ValueKey('emailSignupField'),
                         controller: _emailController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your email';
-                          } else if (!EmailValidator.validate(value)) {
-                            return "Please enter a valid email";
-                          }
-                          return null;
-                        },
+                        validator: validateEmail,
                         maxLines: 1,
                         decoration: InputDecoration(
                           hintText: 'Email address',
@@ -206,20 +234,34 @@ class _RegisterPageState extends State<RegisterPage> {
                         height: 20,
                       ),
                       TextFormField(
+                        key: const ValueKey('passwordSignupField'),
                         controller: _passwordController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your password';
-                          } else if (value.length < 6) {
-                            return 'Password must be at least 6 characters';
-                          }
-                          return null;
-                        },
+                        validator: validatePassword,
                         maxLines: 1,
                         obscureText: true,
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.lock),
                           hintText: 'Password',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                        key: const ValueKey('confirmPasswordSignupField'),
+                        controller: _confirmPasswordController,
+                        validator: (value) {
+                          return validateConfirmPassword(
+                              value, _passwordController.text);
+                        },
+                        maxLines: 1,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.lock),
+                          hintText: 'Confirm password',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
