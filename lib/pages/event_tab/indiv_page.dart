@@ -287,11 +287,9 @@ class _IndivPageState extends State<IndivPage>
             eventDetails: widget.eventDetails,
             user: widget.user,
           ),
-          isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : ActivityPage(
-                  event: widget.eventDetails,
-                ),
+          ActivityPage(
+            event: widget.eventDetails,
+          ),
           isLoading
               ? const Center(child: CircularProgressIndicator())
               : everyoneSubmitted

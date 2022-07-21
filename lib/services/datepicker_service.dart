@@ -94,12 +94,18 @@ class DatePickerService {
             await _client.from('events_activities').insert({
               'activity_id': activity.activityID,
               'event_id': eventID,
+              'cost': activity.cost,
+              'activity_description': activity.description,
+              'activity_name': activity.name,
             }).execute();
           } else {
             await _client.from('events_activities').insert({
               'activity_id': activity.activityID,
               'event_id': eventID,
               'distance': totalDistance / locations.length,
+              'cost': activity.cost,
+              'activity_description': activity.description,
+              'activity_name': activity.name,
             }).execute();
           }
         } else {
