@@ -11,10 +11,10 @@ class LoginPage extends StatefulWidget {
   final String title;
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<LoginPage> createState() => LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   User? user;
 
@@ -76,6 +76,20 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  static String? validateUsername(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Please enter your username";
+    }
+    return null;
+  }
+
+  static String? validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your password';
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,14 +116,9 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 children: [
                   TextFormField(
+                    key: const ValueKey('usernameLoginField'),
                     controller: _usernameController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your username';
-                      } else {
-                        return null;
-                      }
-                    },
+                    validator: validateUsername,
                     maxLines: 1,
                     decoration: InputDecoration(
                       hintText: 'Username',
@@ -123,14 +132,9 @@ class _LoginPageState extends State<LoginPage> {
                     height: 20,
                   ),
                   TextFormField(
+                    key: const ValueKey('passwordLoginField'),
                     controller: _passwordController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your password';
-                      } else {
-                        return null;
-                      }
-                    },
+                    validator: validatePassword,
                     maxLines: 1,
                     obscureText: true,
                     decoration: InputDecoration(
@@ -145,6 +149,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 20,
                   ),
                   ElevatedButton(
+                    key: const ValueKey('LoginButton'),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
@@ -155,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
                     ),
                     child: const Text(
-                      'Log in',
+                      'Login',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import './home_page.dart';
-import '../models/user.dart';
+import 'package:gaigai_planner/pages/home_page.dart';
+import 'package:gaigai_planner/models/user.dart';
 import 'edit_profile pages/edit_password.dart';
 import 'edit_profile pages/edit_profile_page.dart';
 
