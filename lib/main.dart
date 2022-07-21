@@ -25,7 +25,7 @@ ColorScheme defaultColorScheme = const ColorScheme(
 );
 
 class GaigaiPlanner extends StatelessWidget {
-  GaigaiPlanner({Key? key}) : super(key: key);
+  const GaigaiPlanner({Key? key}) : super(key: key);
 
   //model.User user;
 
