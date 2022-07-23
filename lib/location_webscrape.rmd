@@ -1,0 +1,9 @@
+getTravelTime() {
+    defaultFront = "https://www.distantias.com/distance-from-"
+    defaultBack = ".htm#calculations"
+    location = "yishun-singapore-to-woodlands-singapore"
+
+    webpage = read_html(defaultFront + location + defaultBack)
+    time = html_text(html_nodes(webpage, "#drivingbox2"))
+    print(time)
+}
