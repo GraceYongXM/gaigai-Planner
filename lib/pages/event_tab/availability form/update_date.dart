@@ -30,6 +30,15 @@ class _UpdateDateState extends State<UpdateDate> {
       appBar: AppBar(
         title: const Text('Update Availability'),
         centerTitle: true,
+        /*leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_rounded,
+            color: Colors.white,
+          ),
+          onPressed: (() {
+            Navigator.pop(context);
+          }),
+        ),*/
       ),
       body: SfDateRangePicker(
         selectionMode: DateRangePickerSelectionMode.multiple,

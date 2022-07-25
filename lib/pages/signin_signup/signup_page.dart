@@ -133,7 +133,8 @@ class RegisterPageState extends State<RegisterPage> {
         context: context,
         builder: (BuildContext context) => AlertDialog(
           title: const Text('Success'),
-          content: const Text('You have created an account!'),
+          content: const Text(
+              'A verification link is sent to your email! After verification, your account is created!'),
           actions: <Widget>[
             TextButton(
               onPressed: () {

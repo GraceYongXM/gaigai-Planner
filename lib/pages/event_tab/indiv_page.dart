@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gaigai_planner/pages/event_tab/availability%20form/update_date.dart';
 import 'package:intl/intl.dart';
 
 import 'package:gaigai_planner/pages/event_tab/activities/activity_page.dart';
@@ -30,7 +31,8 @@ class IndivPage extends StatefulWidget {
 class _IndivPageState extends State<IndivPage>
     with SingleTickerProviderStateMixin {
   List<String> options = [
-    'Edit form',
+    'Edit event form',
+    'Edit availability form',
     'View requests',
     'Share event',
     'Delete event'
@@ -101,7 +103,8 @@ class _IndivPageState extends State<IndivPage>
   Widget build(BuildContext context) {
     if (widget.eventDetails.ownerID != widget.user.id) {
       // check if user is owner of event
-      options.removeWhere((element) => element != 'Share event');
+      options.removeWhere((element) =>
+          !(element == 'Share event' || element == 'Edit availability form'));
     }
 
     return Scaffold(
@@ -156,7 +159,7 @@ class _IndivPageState extends State<IndivPage>
                   .toList();
             },
             onSelected: (String choice) {
-              if (choice == 'Edit form') {
+              if (choice == 'Edit event form') {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -165,6 +168,16 @@ class _IndivPageState extends State<IndivPage>
                       user: widget.user,
                       startDate: widget.eventDetails.startDate,
                       endDate: widget.eventDetails.endDate,
+                    ),
+                  ),
+                );
+              } else if (choice == 'Edit availability form') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UpdateDate(
+                      user: widget.user,
+                      eventDetails: widget.eventDetails,
                     ),
                   ),
                 );

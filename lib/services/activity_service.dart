@@ -30,44 +30,7 @@ class ActivityService {
 
   void sortByDistance(List<EventActivity> list) async {
     list.sort(((a, b) => a.distance.compareTo(b.distance)));
-    /*final response = await _client
-        .from('events_activities')
-        .select()
-        .match({'event_id': eventID}).execute();
-    if (response.error == null) {
-      final results = response.data as List<dynamic>;
-      List<EventActivity> eventActivityList =
-          results.map((e) => toEventActivity(e)).toList();
-      eventActivityList.sort(((a, b) => a.distance.compareTo(b.distance)));
-
-      List<Activity> newList = [];
-      for (EventActivity eventActivity in eventActivityList) {
-        print('activity name ${eventActivity.activityID}');
-        var activity = (await getActivityFromID(eventActivity.activityID))[0];
-        newList.add(activity);
-      }
-      log('Success in sortByDistance');
-      return newList;
-    } else {
-      log('Error in sortByDistance: ${response.error!.message}');
-    }
-    return [];*/
   }
-
-  /*Future<List<Activity>> getActivityFromID(String id) async {
-    final response = await _client
-        .from('activities')
-        .select()
-        .match({'activity_id': id}).execute();
-    if (response.error == null) {
-      final results = response.data as List<dynamic>;
-      List<Activity> activity = results.map((e) => toActivity(e)).toList();
-      return activity;
-    } else {
-      log('Error in getActivityFromID: ${response.error!.message}');
-    }
-    return [];
-  }*/
 
   Activity toActivity(Map<String, dynamic> result) {
     return Activity(
