@@ -75,6 +75,7 @@ class DatePickerService {
                 e['name'],
                 e['location'],
                 e['cost'],
+                e['distance'],
                 e['description'],
                 e['latitude'],
                 e['longitude'],
@@ -97,6 +98,7 @@ class DatePickerService {
               'cost': activity.cost,
               'activity_description': activity.description,
               'activity_name': activity.name,
+              'distance': 0,
             }).execute();
           } else {
             await _client.from('events_activities').insert({
@@ -112,7 +114,7 @@ class DatePickerService {
           if (locations.isEmpty) {
             await _client
                 .from('events_activities')
-                .update({'distance': null}).match({
+                .update({'distance': 0}).match({
               'activity_id': activity.activityID,
               'event_id': eventID,
             }).execute();

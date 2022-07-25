@@ -38,14 +38,5 @@ void main() {
 
     tester.printToConsole('Home page opens');
     expect(find.text('Gaigai Planner'), findsOneWidget);
-/*
-    await tester.tap(find.byKey(const ValueKey('homePageSettings')));
-    await tester.tap(find.byKey(const Key('logOutButton')));
-
-    await addDelay(3000);
-    await tester.pumpAndSettle();
-    tester.printToConsole('Login page opens');
-    expect(find.text('Log in'), findsOneWidget);
-*/
   });
 }

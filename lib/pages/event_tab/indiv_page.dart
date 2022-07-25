@@ -172,7 +172,7 @@ class _IndivPageState extends State<IndivPage>
                   ),
                 );
               } else if (choice == 'Edit availability form') {
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => UpdateDate(
