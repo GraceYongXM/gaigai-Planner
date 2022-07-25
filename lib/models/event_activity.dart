@@ -2,7 +2,7 @@ import 'dart:core';
 
 class EventActivity {
   String activityID, eventID, activityName, activityDescription;
-  double distance;
+  num distance;
   num cost;
   bool isConfirmed;
 
