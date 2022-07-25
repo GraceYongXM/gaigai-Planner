@@ -15,13 +15,21 @@ Criteria
 To try gaigaiPlanner, do follow the instructions below.
 
 ### Using an Emulator
-1. Download and install Flutter & chosen emulator. 
+1. Download and install Flutter & chosen emulator
 2. Clone or download this repository.
 3. In the terminal, use flutter pub get to get the necessary dependencies
 4. Set up an emulator and ensure it is running
 5. Open this repository folder in a text editor, and run the main.dart file. The application should appear on the emulator.
 
 Alternatively, 
-1. Download the .apk file under releases v2.0.0.
+1. Download the .apk file from the latest release.
 2. Open your emulator.
 3. Drag and drop the downloaded file onto the emulator. The application should appear on the emulator.
+
+OR (for Android users)
+1. Download the .apk file from the latest release.
+2. Enable Developer options and USB debugging on your Android device. Detailed instructions are available in the Android documentation.
+3. Using a USB cable, plug your phone into your computer. If prompted on your device, authorise your computer to access your device.
+4. In the terminal, run the flutter devices command to verify that Flutter recognizes your connected Android device.
+5. Run the app on flutter.
+
