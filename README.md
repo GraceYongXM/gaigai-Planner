@@ -1,6 +1,6 @@
 # gaigaiPlanner
 
-An NUS Orbital project. Level of achievement: Apollo
+A NUS Orbital project. Level of achievement: Apollo 11
 
 Want to schedule a catch up with your friends but is too tired of planning & re-planning the ***perfect*** meet-up for everyone? 😫
 
